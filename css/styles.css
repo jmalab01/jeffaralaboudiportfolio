@@ -84,6 +84,10 @@ body {
     background-clip: text;
     font-weight: 700;
     letter-spacing: 0.5px;
+    text-decoration: none;
+}
+.nav-brand a {
+    text-decoration: none;
 }
 
 .nav-menu {
