@@ -24,6 +24,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-color);
+    background-color: var(--secondary-color);
 }
 
 .container {
@@ -165,7 +166,6 @@ body {
     align-items: center;
     background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
     color: var(--white);
-    padding-top: 80px;
 }
 
 .hero-content {
