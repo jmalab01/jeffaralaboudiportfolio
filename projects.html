@@ -217,6 +217,10 @@
             <div class="viewer-bar">
                 <i class="fas fa-file-alt viewer-bar-icon" id="viewerIcon"></i>
                 <span class="viewer-bar-name" id="viewerTitle"></span>
+                <button id="viewerBack" class="viewer-bar-newtab" title="Back to project files">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
+                </button>
                 <button id="viewerNewTab" class="viewer-bar-newtab">
                     <i class="fas fa-arrow-up-right-from-square"></i>
                     <span>Open in New Tab</span>
@@ -628,6 +632,7 @@
         const closeBtn     = document.getElementById('modalClose');
         const viewerOvly   = document.getElementById('viewerOverlay');
         const viewerClose  = document.getElementById('viewerClose');
+        const viewerBack   = document.getElementById('viewerBack');
         const viewerTitle  = document.getElementById('viewerTitle');
         const viewerIcon   = document.getElementById('viewerIcon');
         const viewerFrame  = document.getElementById('viewerFrame');
@@ -679,10 +684,18 @@
             viewerFrame.src = '';
             viewerFrame.style.display = 'block';
             viewerExtPanel.classList.remove('active');
-            document.body.style.overflow = '';
+            // If a modal was open before, reopen it
+            if (overlay._pendingReopen) {
+                overlay._pendingReopen = false;
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
         }
 
         viewerClose.addEventListener('click', closeViewer);
+        viewerBack.addEventListener('click', closeViewer);
         viewerOvly.addEventListener('click', e => { if (e.target === viewerOvly) closeViewer(); });
 
         // "Open in New Tab" buttons — explicit click handler so it always works
@@ -752,7 +765,7 @@
                             <i class="fas fa-eye file-arrow"></i>`;
                         item.addEventListener('click', ev => {
                             ev.preventDefault();
-                            closeModal();
+                            closeModal(true); // keep overlay data so viewer can go back
                             openViewer(f.href, f.name);
                         });
                         list.appendChild(item);
@@ -765,13 +778,14 @@
             });
         });
 
-        function closeModal() {
+        function closeModal(keepForViewer = false) {
             overlay.classList.remove('active');
-            document.body.style.overflow = '';
+            overlay._pendingReopen = keepForViewer;
+            if (!keepForViewer) document.body.style.overflow = '';
         }
-        closeBtn.addEventListener('click', closeModal);
+        closeBtn.addEventListener('click', () => closeModal());
         overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeViewer(); } });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (viewerOvly.classList.contains('active')) { closeViewer(); } else { closeModal(); } } });
     </script>
 </body>
 </html>
