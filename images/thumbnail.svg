@@ -1,146 +1,136 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" style="font-family:'Segoe UI',Helvetica,Arial,sans-serif">
   <defs>
-    <!-- Background gradient: dark navy to deep purple -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0D1317;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#101D42;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1a1040;stop-opacity:1" />
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e1a"/>
+      <stop offset="100%" stop-color="#0f1635"/>
     </linearGradient>
-    <!-- Accent gradient for bar/accents -->
-    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#6564DB;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#232ED1;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#89D2DC;stop-opacity:1" />
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6564DB"/>
+      <stop offset="55%" stop-color="#232ED1"/>
+      <stop offset="100%" stop-color="#89D2DC"/>
     </linearGradient>
-    <!-- Glow for circles -->
-    <radialGradient id="glowLeft" cx="15%" cy="80%" r="40%">
-      <stop offset="0%" style="stop-color:#6564DB;stop-opacity:0.25" />
-      <stop offset="100%" style="stop-color:#6564DB;stop-opacity:0" />
-    </radialGradient>
-    <radialGradient id="glowRight" cx="85%" cy="20%" r="40%">
-      <stop offset="0%" style="stop-color:#89D2DC;stop-opacity:0.18" />
-      <stop offset="100%" style="stop-color:#89D2DC;stop-opacity:0" />
-    </radialGradient>
-    <!-- Text shadow filter -->
-    <filter id="textGlow">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+    <linearGradient id="accentV" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6564DB"/>
+      <stop offset="100%" stop-color="#232ED1"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6564DB" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#232ED1" stop-opacity="0.06"/>
+    </linearGradient>
+    <filter id="glow" x="-15%" y="-40%" width="130%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    <filter id="cardShadow" x="-5%" y="-5%" width="115%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#6564DB" flood-opacity="0.3"/>
+    </filter>
+    <pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.1" fill="#6564DB" fill-opacity="0.08"/>
+    </pattern>
   </defs>
 
   <!-- Background -->
-  <rect width="1200" height="630" fill="url(#bgGrad)" />
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
 
-  <!-- Ambient glow blobs -->
-  <ellipse cx="180" cy="504" rx="320" ry="260" fill="url(#glowLeft)" />
-  <ellipse cx="1020" cy="126" rx="320" ry="260" fill="url(#glowRight)" />
+  <!-- Atmosphere glows -->
+  <ellipse cx="1080" cy="60"  rx="380" ry="240" fill="#232ED1" fill-opacity="0.07"/>
+  <ellipse cx="150"  cy="560" rx="300" ry="200" fill="#6564DB" fill-opacity="0.10"/>
+  <ellipse cx="700"  cy="315" rx="420" ry="280" fill="#6564DB" fill-opacity="0.03"/>
 
-  <!-- Decorative grid lines (subtle) -->
-  <g stroke="#6564DB" stroke-opacity="0.06" stroke-width="1">
-    <line x1="0" y1="105" x2="1200" y2="105" />
-    <line x1="0" y1="210" x2="1200" y2="210" />
-    <line x1="0" y1="315" x2="1200" y2="315" />
-    <line x1="0" y1="420" x2="1200" y2="420" />
-    <line x1="0" y1="525" x2="1200" y2="525" />
-    <line x1="200" y1="0" x2="200" y2="630" />
-    <line x1="400" y1="0" x2="400" y2="630" />
-    <line x1="600" y1="0" x2="600" y2="630" />
-    <line x1="800" y1="0" x2="800" y2="630" />
-    <line x1="1000" y1="0" x2="1000" y2="630" />
-  </g>
+  <!-- Large decorative rings -->
+  <circle cx="1100" cy="0"   r="300" fill="none" stroke="#89D2DC" stroke-width="1" stroke-opacity="0.07"/>
+  <circle cx="1100" cy="0"   r="220" fill="none" stroke="#89D2DC" stroke-width="1" stroke-opacity="0.05"/>
+  <circle cx="100"  cy="630" r="280" fill="none" stroke="#6564DB" stroke-width="1" stroke-opacity="0.07"/>
+  <circle cx="100"  cy="630" r="200" fill="none" stroke="#6564DB" stroke-width="1" stroke-opacity="0.05"/>
 
-  <!-- Top gradient bar -->
-  <rect x="0" y="0" width="1200" height="5" fill="url(#accentGrad)" />
+  <!-- ── LEFT PANEL ── -->
+  <rect x="0" y="0" width="400" height="630" fill="url(#panel)"/>
+  <line x1="400" y1="0" x2="400" y2="630" stroke="url(#accentV)" stroke-width="2.5" stroke-opacity="0.6"/>
 
-  <!-- Bottom gradient bar -->
-  <rect x="0" y="625" width="1200" height="5" fill="url(#accentGrad)" />
+  <!-- Avatar ring -->
+  <circle cx="200" cy="228" r="94" fill="none" stroke="url(#accent)" stroke-width="3" filter="url(#cardShadow)"/>
+  <circle cx="200" cy="228" r="88" fill="#111827"/>
+  <!-- Monogram -->
+  <text x="200" y="248" text-anchor="middle" font-size="56" font-weight="800" fill="url(#accent)" filter="url(#glow)">JA</text>
 
-  <!-- Decorative circle top-right -->
-  <circle cx="1120" cy="80" r="90" fill="none" stroke="url(#accentGrad)" stroke-width="1.5" stroke-opacity="0.3" />
-  <circle cx="1120" cy="80" r="60" fill="none" stroke="#6564DB" stroke-width="1" stroke-opacity="0.2" />
+  <!-- Name -->
+  <text x="200" y="355" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff" letter-spacing="2.5">JEFFAR ALABOUDI</text>
+  <!-- Underline -->
+  <rect x="90" y="366" width="220" height="2.5" rx="1.5" fill="url(#accent)"/>
+  <!-- Role -->
+  <text x="200" y="394" text-anchor="middle" font-size="13" font-weight="400" fill="#89D2DC" letter-spacing="1.8">BUSINESS &amp; SYSTEMS ANALYST</text>
 
-  <!-- Decorative circle bottom-left -->
-  <circle cx="80" cy="560" r="80" fill="none" stroke="url(#accentGrad)" stroke-width="1.5" stroke-opacity="0.25" />
+  <!-- Skill badges -->
+  <rect x="62"  y="422" width="82"  height="26" rx="13" fill="#6564DB" fill-opacity="0.22" stroke="#6564DB" stroke-width="1.2"/>
+  <text x="103" y="439" text-anchor="middle" font-size="11.5" fill="#c4c3f7" letter-spacing="0.5">Python</text>
 
-  <!-- Left accent vertical bar -->
-  <rect x="80" y="160" width="5" height="310" rx="3" fill="url(#accentGrad)" />
+  <rect x="154" y="422" width="62"  height="26" rx="13" fill="#232ED1" fill-opacity="0.22" stroke="#232ED1" stroke-width="1.2"/>
+  <text x="185" y="439" text-anchor="middle" font-size="11.5" fill="#a9b0f7" letter-spacing="0.5">SQL</text>
 
-  <!-- Main name -->
-  <text x="120" y="260"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="80"
-    font-weight="700"
-    fill="#ffffff"
-    filter="url(#textGlow)"
-    letter-spacing="-1">Jeffar Alaboudi</text>
+  <rect x="226" y="422" width="90"  height="26" rx="13" fill="#6564DB" fill-opacity="0.16" stroke="#6564DB" stroke-width="1.2"/>
+  <text x="271" y="439" text-anchor="middle" font-size="11.5" fill="#c4c3f7" letter-spacing="0.5">JavaScript</text>
 
-  <!-- Gradient underline under name -->
-  <rect x="120" y="272" width="560" height="4" rx="2" fill="url(#accentGrad)" />
+  <rect x="88"  y="458" width="86"  height="26" rx="13" fill="#89D2DC" fill-opacity="0.13" stroke="#89D2DC" stroke-width="1.2"/>
+  <text x="131" y="475" text-anchor="middle" font-size="11.5" fill="#89D2DC" letter-spacing="0.5">Power BI</text>
 
-  <!-- Role / tagline -->
-  <text x="122" y="330"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="28"
-    font-weight="400"
-    fill="#89D2DC"
-    letter-spacing="1">Business Analyst  ·  Systems Analyst  ·  CIS Graduate</text>
+  <rect x="184" y="458" width="96"  height="26" rx="13" fill="#232ED1" fill-opacity="0.18" stroke="#232ED1" stroke-width="1.2"/>
+  <text x="232" y="475" text-anchor="middle" font-size="11.5" fill="#a9b0f7" letter-spacing="0.5">Cybersecurity</text>
 
-  <!-- University line -->
-  <text x="122" y="375"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="22"
-    font-weight="300"
-    fill="rgba(255,255,255,0.55)"
-    letter-spacing="0.5">University of Louisville  ·  Computer Information Systems</text>
+  <!-- UofL label bottom of panel -->
+  <text x="200" y="560" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.28)" letter-spacing="1">UNIVERSITY OF LOUISVILLE</text>
+  <text x="200" y="580" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.18)" letter-spacing="0.5">Computer Information Systems</text>
+
+  <!-- ── RIGHT SECTION ── -->
+  <!-- Top accent bar -->
+  <rect x="420" y="0" width="780" height="5" fill="url(#accent)"/>
+
+  <!-- PORTFOLIO label -->
+  <text x="450" y="65" font-size="12" font-weight="600" fill="#6564DB" letter-spacing="5.5">PORTFOLIO</text>
+
+  <!-- Headline -->
+  <text x="450" y="158" font-size="68" font-weight="800" fill="#ffffff" letter-spacing="-1.5" filter="url(#glow)">Hello, I'm</text>
+  <text x="450" y="240" font-size="68" font-weight="800" fill="url(#accent)" letter-spacing="-1.5" filter="url(#glow)">Jeffar Alaboudi</text>
+
+  <!-- Tagline -->
+  <text x="452" y="284" font-size="20" font-weight="300" fill="rgba(255,255,255,0.6)" letter-spacing="0.3">Business Analyst · Systems Analyst · CIS Graduate</text>
 
   <!-- Divider -->
-  <rect x="120" y="405" width="900" height="1" fill="rgba(101,100,219,0.25)" />
+  <rect x="450" y="308" width="700" height="1" fill="rgba(101,100,219,0.28)"/>
 
-  <!-- Skill tags row -->
-  <!-- Tag 1: Business Analysis -->
-  <rect x="120" y="425" width="195" height="38" rx="19" fill="rgba(101,100,219,0.18)" stroke="#6564DB" stroke-width="1.2" />
-  <text x="217" y="449" text-anchor="middle"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="16" fill="#c4c3f5" letter-spacing="0.3">Business Analysis</text>
+  <!-- ── STAT CARDS ── -->
+  <!-- Card 1 -->
+  <rect x="450" y="330" width="188" height="102" rx="14" fill="#111827" stroke="#6564DB" stroke-width="1.3" stroke-opacity="0.55" filter="url(#cardShadow)"/>
+  <text x="544" y="382" text-anchor="middle" font-size="40" font-weight="800" fill="url(#accent)">20+</text>
+  <text x="544" y="413" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.45)" letter-spacing="1.5">PROJECTS</text>
 
-  <!-- Tag 2: Cybersecurity -->
-  <rect x="328" y="425" width="165" height="38" rx="19" fill="rgba(35,46,209,0.18)" stroke="#232ED1" stroke-width="1.2" />
-  <text x="410" y="449" text-anchor="middle"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="16" fill="#a9b0f7" letter-spacing="0.3">Cybersecurity</text>
+  <!-- Card 2 -->
+  <rect x="653" y="330" width="188" height="102" rx="14" fill="#111827" stroke="#6564DB" stroke-width="1.3" stroke-opacity="0.55" filter="url(#cardShadow)"/>
+  <text x="747" y="382" text-anchor="middle" font-size="40" font-weight="800" fill="url(#accent)">32+</text>
+  <text x="747" y="413" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.45)" letter-spacing="1.5">SKILLS</text>
 
-  <!-- Tag 3: Data Analytics -->
-  <rect x="506" y="425" width="168" height="38" rx="19" fill="rgba(137,210,220,0.12)" stroke="#89D2DC" stroke-width="1.2" />
-  <text x="590" y="449" text-anchor="middle"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="16" fill="#89D2DC" letter-spacing="0.3">Data Analytics</text>
+  <!-- Card 3 -->
+  <rect x="856" y="330" width="220" height="102" rx="14" fill="#111827" stroke="#6564DB" stroke-width="1.3" stroke-opacity="0.55" filter="url(#cardShadow)"/>
+  <text x="966" y="382" text-anchor="middle" font-size="40" font-weight="800" fill="url(#accent)">500+</text>
+  <text x="966" y="413" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.45)" letter-spacing="1.5">HOURS EXP.</text>
 
-  <!-- Tag 4: SQL -->
-  <rect x="687" y="425" width="90" height="38" rx="19" fill="rgba(101,100,219,0.13)" stroke="#6564DB" stroke-width="1.2" />
-  <text x="732" y="449" text-anchor="middle"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="16" fill="#c4c3f5" letter-spacing="0.3">SQL</text>
+  <!-- ── BOTTOM BAR ── -->
+  <rect x="420" y="460" width="780" height="170" fill="#090d18" fill-opacity="0.7"/>
+  <rect x="420" y="460" width="780" height="1.5" fill="rgba(101,100,219,0.22)"/>
 
-  <!-- Tag 5: Python -->
-  <rect x="790" y="425" width="105" height="38" rx="19" fill="rgba(35,46,209,0.14)" stroke="#232ED1" stroke-width="1.2" />
-  <text x="842" y="449" text-anchor="middle"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="16" fill="#a9b0f7" letter-spacing="0.3">Python</text>
+  <!-- Decorative left accent line in bottom bar -->
+  <rect x="450" y="480" width="3" height="80" rx="1.5" fill="url(#accentV)"/>
 
-  <!-- Website URL bottom right -->
-  <text x="1080" y="590"
-    text-anchor="middle"
-    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
-    font-size="17"
-    font-weight="400"
-    fill="rgba(255,255,255,0.35)"
-    letter-spacing="0.5">jmalab01.github.io/jeffaralaboudiportfolio</text>
+  <!-- About blurb -->
+  <text x="468" y="510" font-size="15" font-weight="600" fill="rgba(255,255,255,0.75)" letter-spacing="0.3">CIS 495 Senior Capstone Portfolio</text>
+  <text x="468" y="534" font-size="13" font-weight="300" fill="rgba(255,255,255,0.38)" letter-spacing="0.2">Specializing in business analysis, cybersecurity, data analytics &amp; systems design</text>
 
-  <!-- Dot accent before URL -->
-  <circle cx="120" cy="585" r="5" fill="#6564DB" fill-opacity="0.7" />
-  <circle cx="135" cy="585" r="5" fill="#232ED1" fill-opacity="0.7" />
-  <circle cx="150" cy="585" r="5" fill="#89D2DC" fill-opacity="0.7" />
+  <!-- Three dots + URL -->
+  <circle cx="468" cy="566" r="5.5" fill="#6564DB"/>
+  <circle cx="484" cy="566" r="5.5" fill="#232ED1"/>
+  <circle cx="500" cy="566" r="5.5" fill="#89D2DC"/>
+  <text x="516" y="571" font-size="14" fill="rgba(255,255,255,0.32)" letter-spacing="0.4">jmalab01.github.io/jeffaralaboudiportfolio</text>
+
+  <!-- Bottom accent bar -->
+  <rect x="420" y="625" width="780" height="5" fill="url(#accent)"/>
 </svg>
