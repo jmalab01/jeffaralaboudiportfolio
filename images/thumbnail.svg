@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <!-- Background gradient: dark navy to deep purple -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D1317;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#101D42;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1040;stop-opacity:1" />
+    </linearGradient>
+    <!-- Accent gradient for bar/accents -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6564DB;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#232ED1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#89D2DC;stop-opacity:1" />
+    </linearGradient>
+    <!-- Glow for circles -->
+    <radialGradient id="glowLeft" cx="15%" cy="80%" r="40%">
+      <stop offset="0%" style="stop-color:#6564DB;stop-opacity:0.25" />
+      <stop offset="100%" style="stop-color:#6564DB;stop-opacity:0" />
+    </radialGradient>
+    <radialGradient id="glowRight" cx="85%" cy="20%" r="40%">
+      <stop offset="0%" style="stop-color:#89D2DC;stop-opacity:0.18" />
+      <stop offset="100%" style="stop-color:#89D2DC;stop-opacity:0" />
+    </radialGradient>
+    <!-- Text shadow filter -->
+    <filter id="textGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+
+  <!-- Ambient glow blobs -->
+  <ellipse cx="180" cy="504" rx="320" ry="260" fill="url(#glowLeft)" />
+  <ellipse cx="1020" cy="126" rx="320" ry="260" fill="url(#glowRight)" />
+
+  <!-- Decorative grid lines (subtle) -->
+  <g stroke="#6564DB" stroke-opacity="0.06" stroke-width="1">
+    <line x1="0" y1="105" x2="1200" y2="105" />
+    <line x1="0" y1="210" x2="1200" y2="210" />
+    <line x1="0" y1="315" x2="1200" y2="315" />
+    <line x1="0" y1="420" x2="1200" y2="420" />
+    <line x1="0" y1="525" x2="1200" y2="525" />
+    <line x1="200" y1="0" x2="200" y2="630" />
+    <line x1="400" y1="0" x2="400" y2="630" />
+    <line x1="600" y1="0" x2="600" y2="630" />
+    <line x1="800" y1="0" x2="800" y2="630" />
+    <line x1="1000" y1="0" x2="1000" y2="630" />
+  </g>
+
+  <!-- Top gradient bar -->
+  <rect x="0" y="0" width="1200" height="5" fill="url(#accentGrad)" />
+
+  <!-- Bottom gradient bar -->
+  <rect x="0" y="625" width="1200" height="5" fill="url(#accentGrad)" />
+
+  <!-- Decorative circle top-right -->
+  <circle cx="1120" cy="80" r="90" fill="none" stroke="url(#accentGrad)" stroke-width="1.5" stroke-opacity="0.3" />
+  <circle cx="1120" cy="80" r="60" fill="none" stroke="#6564DB" stroke-width="1" stroke-opacity="0.2" />
+
+  <!-- Decorative circle bottom-left -->
+  <circle cx="80" cy="560" r="80" fill="none" stroke="url(#accentGrad)" stroke-width="1.5" stroke-opacity="0.25" />
+
+  <!-- Left accent vertical bar -->
+  <rect x="80" y="160" width="5" height="310" rx="3" fill="url(#accentGrad)" />
+
+  <!-- Main name -->
+  <text x="120" y="260"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="80"
+    font-weight="700"
+    fill="#ffffff"
+    filter="url(#textGlow)"
+    letter-spacing="-1">Jeffar Alaboudi</text>
+
+  <!-- Gradient underline under name -->
+  <rect x="120" y="272" width="560" height="4" rx="2" fill="url(#accentGrad)" />
+
+  <!-- Role / tagline -->
+  <text x="122" y="330"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="28"
+    font-weight="400"
+    fill="#89D2DC"
+    letter-spacing="1">Business Analyst  ·  Systems Analyst  ·  CIS Graduate</text>
+
+  <!-- University line -->
+  <text x="122" y="375"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="22"
+    font-weight="300"
+    fill="rgba(255,255,255,0.55)"
+    letter-spacing="0.5">University of Louisville  ·  Computer Information Systems</text>
+
+  <!-- Divider -->
+  <rect x="120" y="405" width="900" height="1" fill="rgba(101,100,219,0.25)" />
+
+  <!-- Skill tags row -->
+  <!-- Tag 1: Business Analysis -->
+  <rect x="120" y="425" width="195" height="38" rx="19" fill="rgba(101,100,219,0.18)" stroke="#6564DB" stroke-width="1.2" />
+  <text x="217" y="449" text-anchor="middle"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="16" fill="#c4c3f5" letter-spacing="0.3">Business Analysis</text>
+
+  <!-- Tag 2: Cybersecurity -->
+  <rect x="328" y="425" width="165" height="38" rx="19" fill="rgba(35,46,209,0.18)" stroke="#232ED1" stroke-width="1.2" />
+  <text x="410" y="449" text-anchor="middle"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="16" fill="#a9b0f7" letter-spacing="0.3">Cybersecurity</text>
+
+  <!-- Tag 3: Data Analytics -->
+  <rect x="506" y="425" width="168" height="38" rx="19" fill="rgba(137,210,220,0.12)" stroke="#89D2DC" stroke-width="1.2" />
+  <text x="590" y="449" text-anchor="middle"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="16" fill="#89D2DC" letter-spacing="0.3">Data Analytics</text>
+
+  <!-- Tag 4: SQL -->
+  <rect x="687" y="425" width="90" height="38" rx="19" fill="rgba(101,100,219,0.13)" stroke="#6564DB" stroke-width="1.2" />
+  <text x="732" y="449" text-anchor="middle"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="16" fill="#c4c3f5" letter-spacing="0.3">SQL</text>
+
+  <!-- Tag 5: Python -->
+  <rect x="790" y="425" width="105" height="38" rx="19" fill="rgba(35,46,209,0.14)" stroke="#232ED1" stroke-width="1.2" />
+  <text x="842" y="449" text-anchor="middle"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="16" fill="#a9b0f7" letter-spacing="0.3">Python</text>
+
+  <!-- Website URL bottom right -->
+  <text x="1080" y="590"
+    text-anchor="middle"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="17"
+    font-weight="400"
+    fill="rgba(255,255,255,0.35)"
+    letter-spacing="0.5">jmalab01.github.io/jeffaralaboudiportfolio</text>
+
+  <!-- Dot accent before URL -->
+  <circle cx="120" cy="585" r="5" fill="#6564DB" fill-opacity="0.7" />
+  <circle cx="135" cy="585" r="5" fill="#232ED1" fill-opacity="0.7" />
+  <circle cx="150" cy="585" r="5" fill="#89D2DC" fill-opacity="0.7" />
+</svg>
