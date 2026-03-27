@@ -141,7 +141,15 @@
         .viewer-ext-panel.active { display: flex; }
         .viewer-ext-icon { font-size: 3rem; color: #4f6ef7; margin-bottom: 16px; }
         .viewer-ext-panel h3 { font-size: 1.1rem; color: #1a1a2e; margin: 0 0 10px; font-weight: 700; }
-        .viewer-ext-panel p { font-size: 0.88rem; color: #777; margin: 0 0 26px; line-height: 1.7; max-width: 380px; }
+        .viewer-ext-panel p { font-size: 0.88rem; color: #777; margin: 0 0 16px; line-height: 1.7; max-width: 380px; }
+        .viewer-ext-url {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fff; border: 1.5px solid #dde3f8; border-radius: 10px;
+            padding: 10px 16px; margin-bottom: 22px; max-width: 480px; width: 100%;
+            font-size: 0.82rem; color: #4f6ef7; word-break: break-all; text-align: left;
+            box-shadow: 0 2px 8px rgba(79,110,247,0.07);
+        }
+        .viewer-ext-url i { flex-shrink: 0; color: #aab4e8; font-size: 0.85rem; }
         .viewer-ext-btn {
             display: inline-flex; align-items: center; gap: 8px;
             padding: 12px 28px; background: #4f6ef7; color: #fff;
@@ -233,6 +241,7 @@
                 <i class="fas fa-link viewer-ext-icon"></i>
                 <h3 id="viewerExtName"></h3>
                 <p>This link can't be shown here directly because the external site blocks embedding.<br>Use the button below to open it.</p>
+                <div class="viewer-ext-url"><i class="fas fa-link"></i><span id="viewerExtUrl"></span></div>
                 <button id="viewerExtBtn" class="viewer-ext-btn">
                     <i class="fas fa-arrow-up-right-from-square"></i> Open in New Tab
                 </button>
@@ -640,6 +649,7 @@
         const viewerExtPanel = document.getElementById('viewerExtPanel');
         const viewerExtName  = document.getElementById('viewerExtName');
         const viewerExtBtn   = document.getElementById('viewerExtBtn');
+        const viewerExtUrl   = document.getElementById('viewerExtUrl');
         const extClass     = { zip:'zip', sql:'sql', cs:'cs', vsdx:'vsdx', pdf:'pdf' };
 
         function openViewer(href, name) {
@@ -656,6 +666,7 @@
                 viewerFrame.style.display = 'none';
                 viewerFrame.src = '';
                 viewerExtName.textContent = name;
+                viewerExtUrl.textContent  = href;
                 viewerExtBtn.setAttribute('data-href', href);
                 viewerExtPanel.classList.add('active');
             } else {
