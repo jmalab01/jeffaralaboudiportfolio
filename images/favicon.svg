@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6564DB"/>
+      <stop offset="100%" stop-color="#89D2DC"/>
+    </linearGradient>
+    <linearGradient id="textgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d4d3ff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square background -->
+  <rect width="100" height="100" rx="22" fill="#0d1635"/>
+
+  <!-- Gradient border ring -->
+  <rect width="100" height="100" rx="22" fill="none" stroke="url(#grad)" stroke-width="3.5"/>
+
+  <!-- Subtle inner glow top -->
+  <ellipse cx="50" cy="10" rx="38" ry="14" fill="#6564DB" fill-opacity="0.18"/>
+
+  <!-- JA letters -->
+  <!-- J -->
+  <text
+    x="18" y="68"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="54"
+    font-weight="800"
+    fill="url(#textgrad)"
+    letter-spacing="-4">J</text>
+
+  <!-- A -->
+  <text
+    x="47" y="68"
+    font-family="'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="54"
+    font-weight="800"
+    fill="url(#grad)"
+    letter-spacing="0">A</text>
+
+  <!-- Bottom accent line -->
+  <rect x="18" y="74" width="64" height="3" rx="1.5" fill="url(#grad)" opacity="0.7"/>
+</svg>
