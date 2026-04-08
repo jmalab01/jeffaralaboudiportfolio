@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 6 - CIS 199 | Jeffar Alaboudi</title>
+    <style>
+        body {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            padding: 32px;
+            margin: 0;
+        }
+        h1 {
+            color: #569cd6;
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+        .meta {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 32px;
+        }
+        .section-title {
+            color: #9cdcfe;
+            font-size: 1.1rem;
+            margin: 28px 0 10px;
+        }
+        .code-block {
+            background: #252526;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px 24px;
+            white-space: pre;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+        .comment  { color: #6a9955; }
+        .keyword  { color: #569cd6; }
+        .type     { color: #4ec9b0; }
+        .string   { color: #ce9178; }
+        .number   { color: #b5cea8; }
+        .method   { color: #dcdcaa; }
+        .dollar   { color: #ffd700; }
+        .output-block {
+            background: #0c0c0c;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px 24px;
+            white-space: pre;
+            line-height: 1.8;
+            font-size: 0.95rem;
+            color: #d4d4d4;
+            overflow-x: auto;
+        }
+        .label { color: #c586c0; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h1>Lab 6 — Pattern Printing</h1>
+<div class="meta">CIS 199 &nbsp;|&nbsp; Jeffar Alaboudi &nbsp;|&nbsp; Grade ID: s2408</div>
+
+<div class="section-title">// Source Code — Program.cs</div>
+<div class="code-block"><span class="comment">//Grade id s2408</span>
+<span class="comment">// display the constant value for max row</span>
+<span class="comment">// the first pattern A  forming a triangle shape, and prints it to the console</span>
+<span class="comment">// second pattern B forming a triangle shape, and prints it to the console</span>
+<span class="comment">// third pattern c forming a triangle shape, and prints it to the console</span>
+<span class="comment">// fourth pattern d forming a triangle shape, and prints it to the console</span>
+
+<span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Collections.Generic;
+<span class="keyword">using</span> System.Linq;
+<span class="keyword">using</span> System.Text;
+<span class="keyword">using</span> System.Threading.Tasks;
+
+<span class="keyword">namespace</span> <span class="type">Lab6</span>
+{
+    <span class="keyword">internal class</span> <span class="type">Program</span>
+    {
+        <span class="keyword">static void</span> <span class="method">Main</span>(<span class="keyword">string</span>[] args)
+        {
+            <span class="keyword">const int</span> MAX_ROWS = <span class="number">10</span>;
+
+            Console.<span class="method">WriteLine</span>(<span class="string">"Pattern A\n"</span>);
+            <span class="keyword">for</span> (<span class="keyword">int</span> row = <span class="number">1</span>; row &lt;= MAX_ROWS; row++)
+            {
+                <span class="keyword">for</span> (<span class="keyword">int</span> dollarsign = <span class="number">1</span>; dollarsign &lt;= row; dollarsign++)
+                {
+                    Console.<span class="method">Write</span>(<span class="string">"$"</span>);
+                }
+                Console.<span class="method">WriteLine</span>();
+            }
+
+            Console.<span class="method">WriteLine</span>(<span class="string">"\nPattern B\n"</span>);
+            <span class="keyword">for</span> (<span class="keyword">int</span> row = MAX_ROWS; row &gt;= <span class="number">1</span>; row--)
+            {
+                <span class="keyword">for</span> (<span class="keyword">int</span> dollarsign = <span class="number">1</span>; dollarsign &lt;= row; dollarsign++)
+                {
+                    Console.<span class="method">Write</span>(<span class="string">"$"</span>);
+                }
+                Console.<span class="method">WriteLine</span>();
+            }
+
+            Console.<span class="method">WriteLine</span>(<span class="string">"\nPattern C\n"</span>);
+            <span class="keyword">for</span> (<span class="keyword">int</span> row = MAX_ROWS; row &gt;= <span class="number">1</span>; row--)
+            {
+                <span class="keyword">for</span> (<span class="keyword">int</span> spaces = <span class="number">0</span>; spaces &lt; MAX_ROWS - row; spaces++)
+                {
+                    Console.<span class="method">Write</span>(<span class="string">" "</span>);
+                }
+                <span class="keyword">for</span> (<span class="keyword">int</span> dollarsign = <span class="number">1</span>; dollarsign &lt;= row; dollarsign++)
+                {
+                    Console.<span class="method">Write</span>(<span class="string">"$"</span>);
+                }
+                Console.<span class="method">WriteLine</span>();
+            }
+
+            Console.<span class="method">WriteLine</span>(<span class="string">"\nPattern D\n"</span>);
+            <span class="keyword">for</span> (<span class="keyword">int</span> row = <span class="number">1</span>; row &lt;= MAX_ROWS; row++)
+            {
+                <span class="keyword">for</span> (<span class="keyword">int</span> spaces = <span class="number">0</span>; spaces &lt; MAX_ROWS - row; spaces++)
+                {
+                    Console.<span class="method">Write</span>(<span class="string">" "</span>);
+                }
+                <span class="keyword">for</span> (<span class="keyword">int</span> dollarsign = <span class="number">1</span>; dollarsign &lt;= row; dollarsign++)
+                {
+                    Console.<span class="method">Write</span>(<span class="string">"$"</span>);
+                }
+                Console.<span class="method">WriteLine</span>();
+            }
+        }
+    }
+}</div>
+
+<div class="section-title">// Console Output</div>
+<div class="output-block"><span class="label">Pattern A</span>
+
+<span class="dollar">$</span>
+<span class="dollar">$$</span>
+<span class="dollar">$$$</span>
+<span class="dollar">$$$$</span>
+<span class="dollar">$$$$$</span>
+<span class="dollar">$$$$$$</span>
+<span class="dollar">$$$$$$$</span>
+<span class="dollar">$$$$$$$$</span>
+<span class="dollar">$$$$$$$$$</span>
+<span class="dollar">$$$$$$$$$$</span>
+
+<span class="label">Pattern B</span>
+
+<span class="dollar">$$$$$$$$$$</span>
+<span class="dollar">$$$$$$$$$</span>
+<span class="dollar">$$$$$$$$</span>
+<span class="dollar">$$$$$$$</span>
+<span class="dollar">$$$$$$</span>
+<span class="dollar">$$$$$</span>
+<span class="dollar">$$$$</span>
+<span class="dollar">$$$</span>
+<span class="dollar">$$</span>
+<span class="dollar">$</span>
+
+<span class="label">Pattern C</span>
+
+<span class="dollar">$$$$$$$$$$</span>
+ <span class="dollar">$$$$$$$$$</span>
+  <span class="dollar">$$$$$$$$</span>
+   <span class="dollar">$$$$$$$</span>
+    <span class="dollar">$$$$$$</span>
+     <span class="dollar">$$$$$</span>
+      <span class="dollar">$$$$</span>
+       <span class="dollar">$$$</span>
+        <span class="dollar">$$</span>
+         <span class="dollar">$</span>
+
+<span class="label">Pattern D</span>
+
+         <span class="dollar">$</span>
+        <span class="dollar">$$</span>
+       <span class="dollar">$$$</span>
+      <span class="dollar">$$$$</span>
+     <span class="dollar">$$$$$</span>
+    <span class="dollar">$$$$$$</span>
+   <span class="dollar">$$$$$$$</span>
+  <span class="dollar">$$$$$$$$</span>
+ <span class="dollar">$$$$$$$$$</span>
+<span class="dollar">$$$$$$$$$$</span></div>
+
+</body>
+</html>
