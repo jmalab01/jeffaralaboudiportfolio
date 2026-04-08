@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5 - CIS 199 | Jeffar Alaboudi</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            padding: 32px;
+            min-height: 100vh;
+        }
+        h1 { color: #569cd6; font-size: 1.4rem; margin-bottom: 4px; }
+        .meta { color: #888; font-size: 0.85rem; margin-bottom: 28px; }
+        .section-title { color: #9cdcfe; font-size: 1.05rem; margin: 28px 0 10px; }
+
+        /* ── Source Code ── */
+        .code-block {
+            background: #252526;
+            border: 1px solid #3c3c3c;
+            border-radius: 8px;
+            padding: 20px 24px;
+            white-space: pre;
+            line-height: 1.75;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        .comment  { color: #6a9955; }
+        .keyword  { color: #569cd6; }
+        .type     { color: #4ec9b0; }
+        .string   { color: #ce9178; }
+        .number   { color: #b5cea8; }
+        .method   { color: #dcdcaa; }
+
+        /* ── Interactive Console ── */
+        .console-wrapper {
+            background: #0c0c0c;
+            border: 1px solid #3c3c3c;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .console-bar {
+            background: #2d2d2d;
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            color: #888;
+            border-bottom: 1px solid #3c3c3c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .console-bar span { color: #4ec9b0; font-weight: bold; }
+        .console-output {
+            padding: 16px 20px;
+            min-height: 180px;
+            font-size: 0.92rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        .console-input-row {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 16px;
+            gap: 8px;
+        }
+        .console-prompt { color: #569cd6; font-size: 0.92rem; white-space: nowrap; }
+        .console-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #555;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.92rem;
+            outline: none;
+            padding: 2px 4px;
+        }
+        .console-input:focus { border-bottom-color: #569cd6; }
+        .btn-enter {
+            background: #0e639c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 16px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-enter:hover { background: #1177bb; }
+        .btn-reset {
+            background: #3c3c3c;
+            color: #ccc;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 14px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin: 0 20px 16px;
+        }
+        .btn-reset:hover { background: #555; }
+
+        .out-normal  { color: #d4d4d4; }
+        .out-prompt  { color: #569cd6; }
+        .out-valid   { color: #4ec9b0; }
+        .out-invalid { color: #f48771; }
+        .out-result  { color: #dcdcaa; font-weight: bold; }
+        .out-input   { color: #ce9178; }
+        .out-stop    { color: #c586c0; }
+    </style>
+</head>
+<body>
+
+<h1>Lab 5 — Temperature Sentinel Loop</h1>
+<div class="meta">CIS 199 &nbsp;|&nbsp; Jeffar Alaboudi &nbsp;|&nbsp; Grade ID: S2408</div>
+
+<!-- ── Source Code ── -->
+<div class="section-title">// Source Code — Program.cs</div>
+<div class="code-block"><span class="comment">// Grade id S2408</span>
+<span class="comment">// enter total vailed temperature</span>
+<span class="comment">// enter vaild counted temperature</span>
+<span class="comment">// enter sentinel value to stop to loop</span>
+<span class="comment">// enter daily high tempea=rature/ 99 exit</span>
+<span class="comment">// enter tempearture then exit loop once sentinal is entered</span>
+<span class="comment">// the equation for temperature plus the count</span>
+<span class="comment">// while also adding if , else to get the temperature</span>
+
+<span class="keyword">using</span> System;
+
+<span class="keyword">namespace</span> <span class="type">Lab5</span>
+{
+    <span class="keyword">class</span> <span class="type">Program</span>
+    {
+        <span class="keyword">static void</span> <span class="method">Main</span>(<span class="keyword">string</span>[] args)
+        {
+            <span class="keyword">int</span> totalTemp = <span class="number">0</span>; <span class="comment">// total vailed temparature</span>
+            <span class="keyword">int</span> count = <span class="number">0</span>;     <span class="comment">// total counted tempearature</span>
+            <span class="keyword">const int</span> SENTINEL = <span class="number">999</span>; <span class="comment">// the value of sentinal which is (999) to stop the loop</span>
+
+            Console.<span class="method">WriteLine</span>(<span class="string">"Enter Temperatures from -20 to 130 (999 to stop)."</span>); <span class="comment">// writeline the sentence</span>
+
+            <span class="keyword">while</span> (<span class="keyword">true</span>)
+            {
+                Console.<span class="method">Write</span>(<span class="string">"Enter Temperature: "</span>);
+                <span class="keyword">if</span> (int.<span class="method">TryParse</span>(Console.<span class="method">ReadLine</span>(), <span class="keyword">out int</span> temperature) &amp;&amp; temperature == SENTINEL) <span class="comment">// parse &amp; check sentinel</span>
+                {
+                    <span class="keyword">break</span>;
+                }
+                <span class="keyword">if</span> (temperature &gt;= <span class="number">-20</span> &amp;&amp; temperature &lt;= <span class="number">130</span>) <span class="comment">// valid range check</span>
+                {
+                    totalTemp += temperature; <span class="comment">// add to total</span>
+                    count++;
+                }
+                <span class="keyword">else</span>
+                {
+                    Console.<span class="method">WriteLine</span>(<span class="string">"Invalid temperature. Must be between -20 and 130."</span>);
+                }
+            }
+
+            <span class="keyword">if</span> (count &gt; <span class="number">0</span>)
+            {
+                <span class="keyword">double</span> average = (<span class="keyword">double</span>)totalTemp / count;
+                Console.<span class="method">WriteLine</span>(<span class="string">$"\nTemperatures entered: {count}"</span>);
+                Console.<span class="method">WriteLine</span>(<span class="string">$"Total: {totalTemp}"</span>);
+                Console.<span class="method">WriteLine</span>(<span class="string">$"Average Temperature: {average:F2}"</span>);
+            }
+            <span class="keyword">else</span>
+            {
+                Console.<span class="method">WriteLine</span>(<span class="string">"\nNo valid temperatures were entered."</span>);
+            }
+        }
+    }
+}</div>
+
+<!-- ── Interactive Console ── -->
+<div class="section-title">// Interactive Console — Try It Live</div>
+<div class="console-wrapper">
+    <div class="console-bar">
+        <span>▶ Lab5.exe</span> &nbsp;— type temperatures and press Enter (type 999 to stop)
+    </div>
+    <div class="console-output" id="output"></div>
+    <div class="console-input-row" id="inputRow">
+        <span class="console-prompt">Enter Temperature:&nbsp;</span>
+        <input class="console-input" id="tempInput" type="number" placeholder="e.g. 72" autofocus>
+        <button class="btn-enter" onclick="submitTemp()">Enter ↵</button>
+    </div>
+    <button class="btn-reset" onclick="resetConsole()">↺ Reset</button>
+</div>
+
+<script>
+    let totalTemp = 0;
+    let count = 0;
+    const SENTINEL = 999;
+    let done = false;
+
+    const output = document.getElementById('output');
+    const inputRow = document.getElementById('inputRow');
+    const tempInput = document.getElementById('tempInput');
+
+    function print(text, cls = 'out-normal') {
+        const span = document.createElement('span');
+        span.className = cls;
+        span.textContent = text + '\n';
+        output.appendChild(span);
+    }
+
+    function init() {
+        print('Enter Temperatures from -20 to 130 (999 to stop).', 'out-normal');
+    }
+
+    function submitTemp() {
+        if (done) return;
+        const raw = tempInput.value.trim();
+        const val = parseInt(raw, 10);
+
+        // Echo the user input
+        print('Enter Temperature: ' + raw, 'out-input');
+        tempInput.value = '';
+
+        if (isNaN(val)) {
+            print('Invalid input. Please enter a whole number.', 'out-invalid');
+            return;
+        }
+
+        if (val === SENTINEL) {
+            print('999 — stopping loop.', 'out-stop');
+            showResults();
+            return;
+        }
+
+        if (val >= -20 && val <= 130) {
+            totalTemp += val;
+            count++;
+            print('✓ Valid temperature added. (' + count + ' so far)', 'out-valid');
+        } else {
+            print('✗ Invalid temperature. Must be between -20 and 130.', 'out-invalid');
+        }
+    }
+
+    function showResults() {
+        done = true;
+        inputRow.style.display = 'none';
+        print('', 'out-normal');
+        if (count > 0) {
+            const avg = (totalTemp / count).toFixed(2);
+            print('Temperatures entered : ' + count, 'out-result');
+            print('Total                : ' + totalTemp, 'out-result');
+            print('Average Temperature  : ' + avg, 'out-result');
+        } else {
+            print('No valid temperatures were entered.', 'out-invalid');
+        }
+    }
+
+    function resetConsole() {
+        totalTemp = 0;
+        count = 0;
+        done = false;
+        output.innerHTML = '';
+        inputRow.style.display = 'flex';
+        tempInput.value = '';
+        tempInput.focus();
+        init();
+    }
+
+    // Allow pressing Enter key
+    tempInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') submitTemp();
+    });
+
+    init();
+</script>
+</body>
+</html>
