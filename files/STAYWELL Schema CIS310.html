@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAYWELL Database Schema — CIS 310</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e8e8e8;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 12px;
+    color: #1a1a1a;
+    padding: 20px 0 40px;
+  }
+
+  .page {
+    background: #fff;
+    width: 850px;
+    margin: 0 auto;
+    padding: 52px 60px 60px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.28);
+    border-radius: 3px;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #101D42;
+    padding-bottom: 14px;
+    margin-bottom: 28px;
+  }
+  .doc-header .left h1 {
+    font-size: 24px;
+    color: #101D42;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+  .doc-header .left .sub {
+    color: #6564DB;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 3px;
+  }
+  .doc-header .right {
+    text-align: right;
+    color: #555;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .doc-header .right strong { color: #101D42; }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: #101D42;
+    padding: 6px 12px;
+    border-radius: 3px;
+    margin: 28px 0 12px;
+    letter-spacing: 0.4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .badge {
+    background: #6564DB;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* ── ER Overview box ── */
+  .er-overview {
+    background: #f7f8ff;
+    border: 1px solid #dde0f7;
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin-bottom: 8px;
+    line-height: 1.9;
+  }
+  .er-overview p { margin-bottom: 6px; color: #333; font-size: 11.5px; }
+  .er-overview ul { padding-left: 22px; }
+  .er-overview ul li { margin-bottom: 3px; }
+  .rel-arrow { color: #6564DB; font-weight: 700; }
+
+  /* ── Table block ── */
+  .table-block {
+    margin-bottom: 26px;
+    border: 1px solid #d0d4e8;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .table-block .table-header {
+    background: linear-gradient(90deg, #6564DB 0%, #89D2DC 100%);
+    color: #fff;
+    padding: 8px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .table-block .table-header .pk-indicator {
+    background: rgba(255,255,255,0.25);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  table.schema-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+  }
+  table.schema-table thead tr { background: #f0f1fa; }
+  table.schema-table th {
+    padding: 7px 12px;
+    text-align: left;
+    font-weight: 700;
+    color: #444;
+    border-bottom: 1px solid #dde0f7;
+    white-space: nowrap;
+  }
+  table.schema-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #ebebeb;
+    vertical-align: top;
+  }
+  table.schema-table tr:last-child td { border-bottom: none; }
+  table.schema-table tr:hover td { background: #fafbff; }
+  .pk { color: #c0392b; font-weight: 700; }
+  .fk { color: #2980b9; font-weight: 700; }
+  .type-badge {
+    display: inline-block;
+    background: #eef0fa;
+    color: #444;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10.5px;
+    font-family: 'Courier New', monospace;
+  }
+  .col-pk-row td { background: #fff9f9 !important; }
+  .col-fk-row td { background: #f5faff !important; }
+
+  /* ── Sample data table ── */
+  .data-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6564DB;
+    padding: 8px 14px 4px;
+    background: #fafbff;
+    border-top: 1px solid #e8eaf6;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5px;
+  }
+  table.data-table thead tr { background: #edf0f7; }
+  table.data-table th {
+    padding: 5px 10px;
+    text-align: left;
+    font-weight: 700;
+    color: #555;
+    border-bottom: 1px solid #dde0f7;
+    white-space: nowrap;
+  }
+  table.data-table td {
+    padding: 4px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    white-space: nowrap;
+  }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table tr:nth-child(even) td { background: #f9f9fd; }
+
+  /* ── SQL block ── */
+  .sql-block {
+    background: #1e1e2e;
+    border-radius: 5px;
+    padding: 18px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    color: #cdd6f4;
+    overflow-x: auto;
+    margin-bottom: 8px;
+  }
+  .sql-keyword { color: #89b4fa; font-weight: bold; }
+  .sql-type    { color: #fab387; }
+  .sql-comment { color: #6c7086; font-style: italic; }
+  .sql-paren   { color: #cba6f7; }
+  .sql-table   { color: #f9e2af; font-weight: bold; }
+  .sql-constraint { color: #a6e3a1; }
+
+  /* ── Footer ── */
+  .doc-footer {
+    border-top: 2px solid #101D42;
+    margin-top: 36px;
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    color: #888;
+    font-size: 10.5px;
+  }
+
+  /* ── Print button ── */
+  .print-bar {
+    width: 850px;
+    margin: 0 auto 14px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .btn-print {
+    background: #101D42;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .btn-print:hover { background: #6564DB; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .print-bar { display: none; }
+    .page { box-shadow: none; padding: 30px 40px; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button class="btn-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="doc-header">
+    <div class="left">
+      <h1>STAYWELL Database Schema</h1>
+      <div class="sub">CIS 310 — Database Management Systems</div>
+    </div>
+    <div class="right">
+      <strong>University of Louisville</strong><br>
+      Jeffar Alaboudi<br>
+      Spring 2025
+    </div>
+  </div>
+
+  <!-- ── ER OVERVIEW ── -->
+  <div class="section-title">Entity-Relationship Overview <span class="badge">6 Tables</span></div>
+  <div class="er-overview">
+    <p>The <strong>STAYWELL</strong> database models a property management company with two Seattle-area offices. It tracks property owners, rental properties, office locations, residents, service categories, and maintenance requests.</p>
+    <ul>
+      <li><strong>OFFICE</strong> <span class="rel-arrow">→</span> <strong>PROPERTY</strong> &nbsp;(one office manages many properties via <code>OFFICE_NUM</code>)</li>
+      <li><strong>OWNER</strong> <span class="rel-arrow">→</span> <strong>PROPERTY</strong> &nbsp;(one owner has many properties via <code>OWNER_NUM</code>)</li>
+      <li><strong>PROPERTY</strong> <span class="rel-arrow">→</span> <strong>RESIDENTS</strong> &nbsp;(one property has many residents via <code>PROPERTY_ID</code>)</li>
+      <li><strong>PROPERTY</strong> <span class="rel-arrow">→</span> <strong>SERVICE_REQUEST</strong> &nbsp;(one property has many service requests via <code>PROPERTY_ID</code>)</li>
+      <li><strong>SERVICE_CATEGORY</strong> <span class="rel-arrow">→</span> <strong>SERVICE_REQUEST</strong> &nbsp;(one category applies to many requests via <code>CATEGORY_NUM</code>)</li>
+    </ul>
+  </div>
+
+  <!-- ══ TABLE DEFINITIONS ══ -->
+  <div class="section-title">Table Definitions</div>
+
+  <!-- ── OWNER ── -->
+  <div class="table-block">
+    <div class="table-header">OWNER <span class="pk-indicator">PK: OWNER_NUM</span></div>
+    <table class="schema-table">
+      <thead><tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">OWNER_NUM</span></td>
+          <td><span class="type-badge">CHAR(5)</span></td>
+          <td>PRIMARY KEY, NOT NULL</td>
+          <td>Unique owner code (e.g. MO100)</td>
+        </tr>
+        <tr><td>LAST_NAME</td><td><span class="type-badge">VARCHAR(20)</span></td><td>NOT NULL</td><td>Owner's last name</td></tr>
+        <tr><td>FIRST_NAME</td><td><span class="type-badge">VARCHAR(20)</span></td><td>NOT NULL</td><td>Owner's first name</td></tr>
+        <tr><td>ADDRESS</td><td><span class="type-badge">VARCHAR(100)</span></td><td>NOT NULL</td><td>Street address</td></tr>
+        <tr><td>CITY</td><td><span class="type-badge">VARCHAR(20)</span></td><td>NOT NULL</td><td>City</td></tr>
+        <tr><td>STATE</td><td><span class="type-badge">CHAR(2)</span></td><td>NOT NULL</td><td>State abbreviation</td></tr>
+        <tr><td>ZIP_CODE</td><td><span class="type-badge">CHAR(5)</span></td><td>NOT NULL</td><td>ZIP code</td></tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (11 rows)</div>
+    <table class="data-table">
+      <thead><tr><th>OWNER_NUM</th><th>LAST_NAME</th><th>FIRST_NAME</th><th>CITY</th><th>STATE</th><th>ZIP_CODE</th></tr></thead>
+      <tbody>
+        <tr><td>MO100</td><td>Moore</td><td>Elle-May</td><td>Reno</td><td>NV</td><td>89508</td></tr>
+        <tr><td>PA101</td><td>Patel</td><td>Makesh</td><td>Seattle</td><td>WA</td><td>98119</td></tr>
+        <tr><td>AK102</td><td>Aksoy</td><td>Ceyda</td><td>Seattle</td><td>WA</td><td>98131</td></tr>
+        <tr><td>CO103</td><td>Cole</td><td>Meerab</td><td>Olympia</td><td>WA</td><td>98506</td></tr>
+        <tr><td>KO104</td><td>Kowalczyk</td><td>Jakub</td><td>Bellingham</td><td>WA</td><td>98226</td></tr>
+        <tr><td>SI105</td><td>Sims</td><td>Haydon</td><td>Portland</td><td>OR</td><td>97203</td></tr>
+        <tr><td>BU106</td><td>Burke</td><td>Ernest</td><td>Twin Falls</td><td>ID</td><td>83303</td></tr>
+        <tr><td>RE107</td><td>Redman</td><td>Seth</td><td>Seattle</td><td>WA</td><td>98119</td></tr>
+        <tr><td>LO108</td><td>Lopez</td><td>Janine</td><td>Everett</td><td>WA</td><td>98213</td></tr>
+        <tr><td>BI109</td><td>Bianchi</td><td>Nicole</td><td>New York</td><td>NY</td><td>10005</td></tr>
+        <tr><td>JO110</td><td>Jones</td><td>Ammarah</td><td>Seattle</td><td>WA</td><td>98126</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── OFFICE ── -->
+  <div class="table-block">
+    <div class="table-header">OFFICE <span class="pk-indicator">PK: OFFICE_NUM</span></div>
+    <table class="schema-table">
+      <thead><tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">OFFICE_NUM</span></td>
+          <td><span class="type-badge">TINYINT</span></td>
+          <td>PRIMARY KEY, NOT NULL</td>
+          <td>Unique office number</td>
+        </tr>
+        <tr><td>OFFICE_NAME</td><td><span class="type-badge">VARCHAR(50)</span></td><td>NOT NULL</td><td>Office branch name</td></tr>
+        <tr><td>ADDRESS</td><td><span class="type-badge">VARCHAR(100)</span></td><td>NOT NULL</td><td>Street address</td></tr>
+        <tr><td>AREA</td><td><span class="type-badge">VARCHAR(50)</span></td><td>NOT NULL</td><td>Neighborhood / area name</td></tr>
+        <tr><td>CITY</td><td><span class="type-badge">VARCHAR(20)</span></td><td>NOT NULL</td><td>City</td></tr>
+        <tr><td>STATE</td><td><span class="type-badge">CHAR(2)</span></td><td>NOT NULL</td><td>State abbreviation</td></tr>
+        <tr><td>ZIP_CODE</td><td><span class="type-badge">CHAR(5)</span></td><td>NOT NULL</td><td>ZIP code</td></tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (2 rows)</div>
+    <table class="data-table">
+      <thead><tr><th>OFFICE_NUM</th><th>OFFICE_NAME</th><th>AREA</th><th>CITY</th><th>STATE</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>StayWell-Colombia City</td><td>Colombia City</td><td>Seattle</td><td>WA</td></tr>
+        <tr><td>2</td><td>StayWell-Georgetown</td><td>Georgetown</td><td>Seattle</td><td>WA</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── PROPERTY ── -->
+  <div class="table-block">
+    <div class="table-header">PROPERTY <span class="pk-indicator">PK: PROPERTY_ID &nbsp;|&nbsp; FK: OFFICE_NUM, OWNER_NUM</span></div>
+    <table class="schema-table">
+      <thead><tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">PROPERTY_ID</span></td>
+          <td><span class="type-badge">SMALLINT</span></td>
+          <td>PRIMARY KEY, NOT NULL</td>
+          <td>Unique property identifier</td>
+        </tr>
+        <tr class="col-fk-row">
+          <td><span class="fk">OFFICE_NUM</span></td>
+          <td><span class="type-badge">TINYINT</span></td>
+          <td>NOT NULL, FK → OFFICE</td>
+          <td>Managing office</td>
+        </tr>
+        <tr><td>ADDRESS</td><td><span class="type-badge">VARCHAR(100)</span></td><td>NOT NULL</td><td>Property street address</td></tr>
+        <tr><td>SQR_FT</td><td><span class="type-badge">SMALLINT</span></td><td>NOT NULL</td><td>Square footage</td></tr>
+        <tr><td>BDRMS</td><td><span class="type-badge">TINYINT</span></td><td>NOT NULL</td><td>Number of bedrooms</td></tr>
+        <tr><td>FLOORS</td><td><span class="type-badge">TINYINT</span></td><td>NOT NULL</td><td>Number of floors</td></tr>
+        <tr><td>MONTHLY_RENT</td><td><span class="type-badge">SMALLINT</span></td><td>—</td><td>Monthly rent in dollars</td></tr>
+        <tr class="col-fk-row">
+          <td><span class="fk">OWNER_NUM</span></td>
+          <td><span class="type-badge">CHAR(5)</span></td>
+          <td>NOT NULL, FK → OWNER</td>
+          <td>Property owner</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (12 rows)</div>
+    <table class="data-table">
+      <thead><tr><th>PROPERTY_ID</th><th>OFFICE_NUM</th><th>ADDRESS</th><th>SQR_FT</th><th>BDRMS</th><th>FLOORS</th><th>MONTHLY_RENT</th><th>OWNER_NUM</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>1</td><td>30 West Thomas Rd.</td><td>1600</td><td>3</td><td>1</td><td>$1,400</td><td>BU106</td></tr>
+        <tr><td>2</td><td>1</td><td>782 Queen Ln.</td><td>2100</td><td>4</td><td>2</td><td>$1,900</td><td>AK102</td></tr>
+        <tr><td>3</td><td>1</td><td>9800 Sunbeam Ave.</td><td>1005</td><td>2</td><td>1</td><td>$1,200</td><td>BI109</td></tr>
+        <tr><td>4</td><td>1</td><td>105 North Illinois Rd.</td><td>1750</td><td>3</td><td>1</td><td>$1,650</td><td>KO104</td></tr>
+        <tr><td>5</td><td>1</td><td>887 Vine Rd.</td><td>1125</td><td>2</td><td>1</td><td>$1,160</td><td>SI105</td></tr>
+        <tr><td>6</td><td>1</td><td>8 Laurel Dr.</td><td>2125</td><td>4</td><td>2</td><td>$2,050</td><td>MO100</td></tr>
+        <tr><td>7</td><td>2</td><td>447 Goldfield St.</td><td>1675</td><td>3</td><td>2</td><td>$1,700</td><td>CO103</td></tr>
+        <tr><td>8</td><td>2</td><td>594 Leatherwood Dr.</td><td>2700</td><td>5</td><td>2</td><td>$2,750</td><td>KO104</td></tr>
+        <tr><td>9</td><td>2</td><td>504 Windsor Ave.</td><td>700</td><td>2</td><td>1</td><td>$1,050</td><td>PA101</td></tr>
+        <tr><td>10</td><td>2</td><td>891 Alton Dr.</td><td>1300</td><td>3</td><td>1</td><td>$1,600</td><td>LO108</td></tr>
+        <tr><td>11</td><td>2</td><td>9531 Sherwood Rd.</td><td>1075</td><td>2</td><td>1</td><td>$1,100</td><td>JO110</td></tr>
+        <tr><td>12</td><td>2</td><td>2 Bow Ridge Ave.</td><td>1400</td><td>3</td><td>2</td><td>$1,700</td><td>RE107</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── SERVICE_CATEGORY ── -->
+  <div class="table-block">
+    <div class="table-header">SERVICE_CATEGORY <span class="pk-indicator">PK: CATEGORY_NUM</span></div>
+    <table class="schema-table">
+      <thead><tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">CATEGORY_NUM</span></td>
+          <td><span class="type-badge">TINYINT</span></td>
+          <td>PRIMARY KEY, NOT NULL</td>
+          <td>Unique service category number</td>
+        </tr>
+        <tr><td>CATEGORY_DESCRIPTION</td><td><span class="type-badge">VARCHAR(100)</span></td><td>NOT NULL</td><td>Name of the service category</td></tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (6 rows)</div>
+    <table class="data-table">
+      <thead><tr><th>CATEGORY_NUM</th><th>CATEGORY_DESCRIPTION</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Plumbing</td></tr>
+        <tr><td>2</td><td>Heating</td></tr>
+        <tr><td>3</td><td>Painting</td></tr>
+        <tr><td>4</td><td>Electrical Systems</td></tr>
+        <tr><td>5</td><td>Carpentry</td></tr>
+        <tr><td>6</td><td>Furniture replacement</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── SERVICE_REQUEST ── -->
+  <div class="table-block">
+    <div class="table-header">SERVICE_REQUEST <span class="pk-indicator">PK: SERVICE_ID &nbsp;|&nbsp; FK: PROPERTY_ID, CATEGORY_NUMBER, OFFICE_ID</span></div>
+    <table class="schema-table">
+      <thead><tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">SERVICE_ID</span></td>
+          <td><span class="type-badge">SMALLINT</span></td>
+          <td>PRIMARY KEY, NOT NULL</td>
+          <td>Unique service request identifier</td>
+        </tr>
+        <tr class="col-fk-row">
+          <td><span class="fk">PROPERTY_ID</span></td>
+          <td><span class="type-badge">SMALLINT</span></td>
+          <td>NOT NULL, FK → PROPERTY</td>
+          <td>Property requiring service</td>
+        </tr>
+        <tr class="col-fk-row">
+          <td><span class="fk">CATEGORY_NUMBER</span></td>
+          <td><span class="type-badge">TINYINT</span></td>
+          <td>NOT NULL, FK → SERVICE_CATEGORY</td>
+          <td>Type of service needed</td>
+        </tr>
+        <tr class="col-fk-row">
+          <td><span class="fk">OFFICE_ID</span></td>
+          <td><span class="type-badge">TINYINT</span></td>
+          <td>NOT NULL, FK → OFFICE</td>
+          <td>Office handling the request</td>
+        </tr>
+        <tr><td>DESCRIPTION</td><td><span class="type-badge">VARCHAR(200)</span></td><td>NOT NULL</td><td>Description of the issue</td></tr>
+        <tr><td>STATUS</td><td><span class="type-badge">VARCHAR(200)</span></td><td>NOT NULL</td><td>Current status of the request</td></tr>
+        <tr><td>EST_HOURS</td><td><span class="type-badge">TINYINT</span></td><td>NOT NULL</td><td>Estimated hours to complete</td></tr>
+        <tr><td>SPENT_HOURS</td><td><span class="type-badge">TINYINT</span></td><td>NOT NULL</td><td>Hours already spent</td></tr>
+        <tr><td>NEXT_SERVICE_DATE</td><td><span class="type-badge">DATE</span></td><td>—</td><td>Next scheduled service date (NULL if open)</td></tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (9 rows)</div>
+    <table class="data-table">
+      <thead><tr><th>SERVICE_ID</th><th>PROPERTY_ID</th><th>CATEGORY</th><th>OFFICE_ID</th><th>STATUS</th><th>EST_HRS</th><th>SPENT_HRS</th><th>NEXT DATE</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>11</td><td>2 – Heating</td><td>2</td><td>Scheduled</td><td>2</td><td>1</td><td>2019-11-01</td></tr>
+        <tr><td>2</td><td>1</td><td>4 – Electrical</td><td>1</td><td>Scheduled</td><td>1</td><td>0</td><td>2019-10-02</td></tr>
+        <tr><td>3</td><td>6</td><td>5 – Carpentry</td><td>1</td><td>Scheduled</td><td>3</td><td>1</td><td>2019-11-09</td></tr>
+        <tr><td>4</td><td>2</td><td>4 – Electrical</td><td>1</td><td>Scheduled</td><td>1</td><td>0</td><td>2019-10-02</td></tr>
+        <tr><td>5</td><td>8</td><td>3 – Painting</td><td>2</td><td>Open</td><td>10</td><td>0</td><td>—</td></tr>
+        <tr><td>6</td><td>4</td><td>1 – Plumbing</td><td>1</td><td>Scheduled</td><td>4</td><td>2</td><td>2019-10-07</td></tr>
+        <tr><td>7</td><td>2</td><td>2 – Heating</td><td>1</td><td>Confirmed</td><td>1</td><td>0</td><td>2019-10-09</td></tr>
+        <tr><td>8</td><td>9</td><td>1 – Plumbing</td><td>2</td><td>Scheduled</td><td>6</td><td>2</td><td>2019-11-12</td></tr>
+        <tr><td>9</td><td>12</td><td>6 – Furniture</td><td>2</td><td>Open</td><td>2</td><td>0</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── RESIDENTS ── -->
+  <div class="table-block">
+    <div class="table-header">RESIDENTS <span class="pk-indicator">PK: RESIDENT_ID &nbsp;|&nbsp; FK: PROPERTY_ID</span></div>
+    <table class="schema-table">
+      <thead><tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">RESIDENT_ID</span></td>
+          <td><span class="type-badge">SMALLINT</span></td>
+          <td>PRIMARY KEY, NOT NULL</td>
+          <td>Unique resident identifier</td>
+        </tr>
+        <tr><td>FIRST_NAME</td><td><span class="type-badge">VARCHAR(20)</span></td><td>NOT NULL</td><td>Resident's first name</td></tr>
+        <tr><td>SURNAME</td><td><span class="type-badge">VARCHAR(20)</span></td><td>NOT NULL</td><td>Resident's last name</td></tr>
+        <tr class="col-fk-row">
+          <td><span class="fk">PROPERTY_ID</span></td>
+          <td><span class="type-badge">SMALLINT</span></td>
+          <td>NOT NULL, FK → PROPERTY</td>
+          <td>Property where resident lives</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (37 rows — showing first 12)</div>
+    <table class="data-table">
+      <thead><tr><th>RESIDENT_ID</th><th>FIRST_NAME</th><th>SURNAME</th><th>PROPERTY_ID</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Albie</td><td>O'Ryan</td><td>1</td></tr>
+        <tr><td>2</td><td>Tariq</td><td>Khan</td><td>1</td></tr>
+        <tr><td>3</td><td>Ismail</td><td>Salib</td><td>1</td></tr>
+        <tr><td>4</td><td>Callen</td><td>Beck</td><td>2</td></tr>
+        <tr><td>5</td><td>Milosz</td><td>Polansky</td><td>2</td></tr>
+        <tr><td>6</td><td>Ashanti</td><td>Lucas</td><td>2</td></tr>
+        <tr><td>7</td><td>Randy</td><td>Woodrue</td><td>2</td></tr>
+        <tr><td>8</td><td>Aislinn</td><td>Lawrence</td><td>3</td></tr>
+        <tr><td>9</td><td>Monique</td><td>French</td><td>3</td></tr>
+        <tr><td>10</td><td>Amara</td><td>Dejsuwan</td><td>4</td></tr>
+        <tr><td>12</td><td>Rosalie</td><td>Blackmore</td><td>4</td></tr>
+        <tr><td>13</td><td>Carina</td><td>Britton</td><td>4</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── SQL CREATE SCRIPT ── -->
+  <div class="section-title">SQL CREATE Script</div>
+  <div class="sql-block">
+<span class="sql-comment">-- ══ STAYWELL Database Schema (SQL Server) ══</span>
+<span class="sql-keyword">BEGIN TRANSACTION</span>;
+
+<span class="sql-comment">-- OWNER</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">OWNER</span> <span class="sql-paren">(</span>
+    OWNER_NUM  <span class="sql-type">CHAR(5)</span>       <span class="sql-keyword">PRIMARY KEY NOT NULL</span>,
+    LAST_NAME  <span class="sql-type">VARCHAR(20)</span>   <span class="sql-constraint">NOT NULL</span>,
+    FIRST_NAME <span class="sql-type">VARCHAR(20)</span>   <span class="sql-constraint">NOT NULL</span>,
+    ADDRESS    <span class="sql-type">VARCHAR(100)</span>  <span class="sql-constraint">NOT NULL</span>,
+    CITY       <span class="sql-type">VARCHAR(20)</span>   <span class="sql-constraint">NOT NULL</span>,
+    STATE      <span class="sql-type">CHAR(2)</span>       <span class="sql-constraint">NOT NULL</span>,
+    ZIP_CODE   <span class="sql-type">CHAR(5)</span>       <span class="sql-constraint">NOT NULL</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- OFFICE</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">OFFICE</span> <span class="sql-paren">(</span>
+    OFFICE_NUM  <span class="sql-type">TINYINT</span>      <span class="sql-keyword">PRIMARY KEY NOT NULL</span>,
+    OFFICE_NAME <span class="sql-type">VARCHAR(50)</span>  <span class="sql-constraint">NOT NULL</span>,
+    ADDRESS     <span class="sql-type">VARCHAR(100)</span> <span class="sql-constraint">NOT NULL</span>,
+    AREA        <span class="sql-type">VARCHAR(50)</span>  <span class="sql-constraint">NOT NULL</span>,
+    CITY        <span class="sql-type">VARCHAR(20)</span>  <span class="sql-constraint">NOT NULL</span>,
+    STATE       <span class="sql-type">CHAR(2)</span>      <span class="sql-constraint">NOT NULL</span>,
+    ZIP_CODE    <span class="sql-type">CHAR(5)</span>      <span class="sql-constraint">NOT NULL</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- PROPERTY</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">PROPERTY</span> <span class="sql-paren">(</span>
+    PROPERTY_ID  <span class="sql-type">SMALLINT</span>    <span class="sql-keyword">PRIMARY KEY NOT NULL</span>,
+    OFFICE_NUM   <span class="sql-type">TINYINT</span>     <span class="sql-constraint">NOT NULL</span>,  <span class="sql-comment">-- FK → OFFICE</span>
+    ADDRESS      <span class="sql-type">VARCHAR(100)</span> <span class="sql-constraint">NOT NULL</span>,
+    SQR_FT       <span class="sql-type">SMALLINT</span>    <span class="sql-constraint">NOT NULL</span>,
+    BDRMS        <span class="sql-type">TINYINT</span>     <span class="sql-constraint">NOT NULL</span>,
+    FLOORS       <span class="sql-type">TINYINT</span>     <span class="sql-constraint">NOT NULL</span>,
+    MONTHLY_RENT <span class="sql-type">SMALLINT</span>,
+    OWNER_NUM    <span class="sql-type">CHAR(5)</span>     <span class="sql-constraint">NOT NULL</span>   <span class="sql-comment">-- FK → OWNER</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- SERVICE_CATEGORY</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">SERVICE_CATEGORY</span> <span class="sql-paren">(</span>
+    CATEGORY_NUM         <span class="sql-type">TINYINT</span>      <span class="sql-keyword">PRIMARY KEY NOT NULL</span>,
+    CATEGORY_DESCRIPTION <span class="sql-type">VARCHAR(100)</span> <span class="sql-constraint">NOT NULL</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- SERVICE_REQUEST</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">SERVICE_REQUEST</span> <span class="sql-paren">(</span>
+    SERVICE_ID        <span class="sql-type">SMALLINT</span>     <span class="sql-keyword">PRIMARY KEY NOT NULL</span>,
+    PROPERTY_ID       <span class="sql-type">SMALLINT</span>     <span class="sql-constraint">NOT NULL</span>,  <span class="sql-comment">-- FK → PROPERTY</span>
+    CATEGORY_NUMBER   <span class="sql-type">TINYINT</span>      <span class="sql-constraint">NOT NULL</span>,  <span class="sql-comment">-- FK → SERVICE_CATEGORY</span>
+    OFFICE_ID         <span class="sql-type">TINYINT</span>      <span class="sql-constraint">NOT NULL</span>,  <span class="sql-comment">-- FK → OFFICE</span>
+    DESCRIPTION       <span class="sql-type">VARCHAR(200)</span> <span class="sql-constraint">NOT NULL</span>,
+    STATUS            <span class="sql-type">VARCHAR(200)</span> <span class="sql-constraint">NOT NULL</span>,
+    EST_HOURS         <span class="sql-type">TINYINT</span>      <span class="sql-constraint">NOT NULL</span>,
+    SPENT_HOURS       <span class="sql-type">TINYINT</span>      <span class="sql-constraint">NOT NULL</span>,
+    NEXT_SERVICE_DATE <span class="sql-type">DATE</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- RESIDENTS</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">RESIDENTS</span> <span class="sql-paren">(</span>
+    RESIDENT_ID <span class="sql-type">SMALLINT</span>    <span class="sql-keyword">PRIMARY KEY NOT NULL</span>,
+    FIRST_NAME  <span class="sql-type">VARCHAR(20)</span> <span class="sql-constraint">NOT NULL</span>,
+    SURNAME     <span class="sql-type">VARCHAR(20)</span> <span class="sql-constraint">NOT NULL</span>,
+    PROPERTY_ID <span class="sql-type">SMALLINT</span>    <span class="sql-constraint">NOT NULL</span>   <span class="sql-comment">-- FK → PROPERTY</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-keyword">COMMIT TRANSACTION</span>;
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="doc-footer">
+    <span>STAYWELL Database Schema &mdash; CIS 310 &mdash; University of Louisville</span>
+    <span>Jeffar Alaboudi &mdash; Spring 2025</span>
+  </div>
+
+</div><!-- end .page -->
+</body>
+</html>
