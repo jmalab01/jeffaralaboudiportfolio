@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program 3 - CIS 199 | Jeffar Alaboudi</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            padding: 32px;
+            min-height: 100vh;
+        }
+        h1 { color: #569cd6; font-size: 1.4rem; margin-bottom: 4px; }
+        .meta { color: #888; font-size: 0.85rem; margin-bottom: 28px; }
+        .section-title { color: #9cdcfe; font-size: 1.05rem; margin: 28px 0 10px; }
+
+        /* ── Source Code ── */
+        .code-block {
+            background: #252526;
+            border: 1px solid #3c3c3c;
+            border-radius: 8px;
+            padding: 20px 24px;
+            white-space: pre;
+            line-height: 1.75;
+            font-size: 0.88rem;
+            overflow-x: auto;
+        }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .type    { color: #4ec9b0; }
+        .string  { color: #ce9178; }
+        .number  { color: #b5cea8; }
+        .method  { color: #dcdcaa; }
+
+        /* ── Windows Form UI ── */
+        .form-wrapper {
+            background: #c86820;
+            border: 2px solid #888;
+            border-radius: 4px;
+            max-width: 480px;
+            overflow: hidden;
+            box-shadow: 4px 4px 16px rgba(0,0,0,0.55);
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .form-titlebar {
+            background: #6b8cba;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .titlebar-btns { display: flex; gap: 2px; }
+        .titlebar-btns button {
+            background: #c0c0c0;
+            border: 1px solid #888;
+            width: 18px; height: 16px;
+            font-size: 0.65rem;
+            cursor: default;
+            padding: 0;
+            line-height: 1;
+        }
+        .form-body { padding: 18px 24px 22px; }
+
+        .form-header {
+            font-size: 1rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-align: center;
+            color: #1a0a00;
+            text-decoration: underline;
+            font-style: italic;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .input-section { margin-bottom: 6px; }
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+        .form-label {
+            width: 130px;
+            text-align: right;
+            font-size: 0.85rem;
+            color: #1a0a00;
+            flex-shrink: 0;
+        }
+        .form-select, .form-input {
+            flex: 1;
+            border: 1px solid #888;
+            border-radius: 2px;
+            padding: 3px 6px;
+            font-size: 0.85rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            outline: none;
+        }
+        .form-select:focus, .form-input:focus { border-color: #0078d4; }
+
+        .btn-calculate {
+            display: block;
+            background: #e8e8e8;
+            color: #1a1a1a;
+            border: 2px outset #ccc;
+            border-radius: 2px;
+            padding: 5px 20px;
+            font-size: 0.88rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            cursor: pointer;
+            margin: 14px 0 18px 138px;
+            transition: background 0.15s;
+        }
+        .btn-calculate:active { border-style: inset; }
+        .btn-calculate:hover { background: #d4d4d4; }
+
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(0,0,0,0.25);
+            margin: 4px 0 16px;
+        }
+
+        .result-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+        .result-label {
+            width: 170px;
+            text-align: right;
+            font-size: 0.83rem;
+            color: #1a0a00;
+            flex-shrink: 0;
+        }
+        .result-box {
+            flex: 1;
+            border: 1px solid #888;
+            border-radius: 2px;
+            background: #fff;
+            padding: 3px 6px;
+            font-size: 0.83rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #1a1a1a;
+            min-height: 22px;
+        }
+
+        .error-msg {
+            background: #fff3cd;
+            border: 1px solid #e0a800;
+            border-radius: 3px;
+            padding: 7px 12px;
+            font-size: 0.82rem;
+            color: #7a4f00;
+            margin-top: 4px;
+            display: none;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .error-msg.show { display: block; }
+    </style>
+</head>
+<body>
+
+<h1>Program 3 — Shipping Contract Calculator</h1>
+<div class="meta">CIS 199 &nbsp;|&nbsp; Jeffar Alaboudi &nbsp;|&nbsp; Grade ID: S2408</div>
+
+<!-- ── Source Code ── -->
+<div class="section-title">// Source Code — Form1.cs</div>
+<div class="code-block"><span class="comment">// Grade id S2408</span>
+<span class="comment">// list all arrays</span>
+<span class="comment">// setup the shipping provider</span>
+<span class="comment">// set up for the contract</span>
+<span class="comment">// setup discount and savings</span>
+<span class="comment">// declare list of varibles</span>
+<span class="comment">// const of vairbles</span>
+<span class="comment">// valdiate comboboxs</span>
+<span class="comment">// calculations</span>
+<span class="comment">// output to labels</span>
+<span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Collections.Generic;
+<span class="keyword">using</span> System.ComponentModel;
+<span class="keyword">using</span> System.Data;
+<span class="keyword">using</span> System.Drawing;
+<span class="keyword">using</span> System.Linq;
+<span class="keyword">using</span> System.Text;
+<span class="keyword">using</span> System.Threading.Tasks;
+<span class="keyword">using</span> System.Windows.Forms;
+
+<span class="keyword">namespace</span> <span class="type">Program3</span>
+{
+    <span class="keyword">public partial class</span> <span class="type">Contract</span> : <span class="type">Form</span>
+    {
+        <span class="comment">// lists of all arrays</span>
+        <span class="keyword">string</span>[] shippingCompanies = { <span class="string">"USPS"</span>, <span class="string">"DHL"</span>, <span class="string">"FedEx"</span>, <span class="string">"UPS"</span> };
+        <span class="keyword">double</span>[] DiscountRates     = { <span class="number">0.25</span>, <span class="number">0.20</span>, <span class="number">0.17</span>, <span class="number">0.15</span> };
+
+        <span class="keyword">string</span>[] businessNames  = { <span class="string">"John's Books"</span>, <span class="string">"Office Supplies"</span>, <span class="string">"J.B. Car Parts"</span>,
+                                    <span class="string">"Gevalia Coffee"</span>, <span class="string">"Ceylon Tea"</span>, <span class="string">"My Footwear"</span> };
+        <span class="keyword">double</span>[] initialPrices   = { <span class="number">55000</span>, <span class="number">87880</span>, <span class="number">65000</span>, <span class="number">90000</span>, <span class="number">75500</span>, <span class="number">40550</span> };
+
+        <span class="keyword">double</span>[] contractLengthLowEnd = { <span class="number">0</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">8</span> };
+        <span class="keyword">double</span>[] savings              = { <span class="number">0</span>, <span class="number">5000</span>, <span class="number">10000</span>, <span class="number">15000</span> };
+
+        <span class="comment">//combo boxes output forms</span>
+        <span class="keyword">public</span> <span class="method">Contract</span>()
+        {
+            <span class="method">InitializeComponent</span>();
+            <span class="method">InitializeComboBoxes</span>();
+        }
+
+        <span class="keyword">private void</span> <span class="method">InitializeComboBoxes</span>()
+        {
+            <span class="keyword">foreach</span> (<span class="keyword">var</span> company <span class="keyword">in</span> shippingCompanies)
+            {
+                shipComboBox.Items.<span class="method">Add</span>(company);
+            }
+            <span class="keyword">foreach</span> (<span class="keyword">var</span> business <span class="keyword">in</span> businessNames)
+            {
+                bizComboBox.Items.<span class="method">Add</span>(business);
+            }
+        }
+
+        <span class="keyword">private void</span> <span class="method">calculateBtn_Click</span>(<span class="keyword">object</span> sender, <span class="type">EventArgs</span> e)
+        {
+            <span class="comment">// valdiate comboboxs</span>
+            <span class="keyword">if</span> (shipComboBox.SelectedIndex &lt; <span class="number">0</span> || bizComboBox.SelectedIndex &lt; <span class="number">0</span>)
+            {
+                MessageBox.<span class="method">Show</span>(<span class="string">"Please select a provider and business."</span>);
+                <span class="keyword">return</span>;
+            }
+
+            <span class="keyword">if</span> (!<span class="keyword">double</span>.<span class="method">TryParse</span>(contractLengthTb.Text, <span class="keyword">out double</span> contractLength) || contractLength &lt; <span class="number">0</span>)
+            {
+                MessageBox.<span class="method">Show</span>(<span class="string">"Please enter a valid contract length in years."</span>);
+                <span class="keyword">return</span>;
+            }
+
+            <span class="keyword">int</span> shipIdx = shipComboBox.SelectedIndex;
+            <span class="keyword">int</span> bizIdx  = bizComboBox.SelectedIndex;
+
+            <span class="keyword">double</span> initialPrice    = initialPrices[bizIdx];
+            <span class="keyword">double</span> companyDiscount = DiscountRates[shipIdx];
+
+            <span class="comment">// calculate length discount based on contract length ranges</span>
+            <span class="keyword">double</span> lengthDiscount = <span class="number">0</span>;
+            <span class="keyword">double</span> lengthSavings  = <span class="number">0</span>;
+            <span class="keyword">for</span> (<span class="keyword">int</span> i = contractLengthLowEnd.Length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)
+            {
+                <span class="keyword">if</span> (contractLength &gt;= contractLengthLowEnd[i])
+                {
+                    lengthSavings  = savings[i];
+                    lengthDiscount = i * <span class="number">0.02</span>;
+                    <span class="keyword">break</span>;
+                }
+            }
+
+            <span class="keyword">double</span> discountedPrice = initialPrice * (<span class="number">1</span> - companyDiscount);
+            <span class="keyword">double</span> finalPrice      = discountedPrice - lengthSavings;
+            <span class="keyword">double</span> totalSavings    = initialPrice - finalPrice;
+
+            <span class="comment">// output to labels</span>
+            providerLbl.Text      = shippingCompanies[shipIdx];
+            initialPriceLbl.Text  = initialPrice.<span class="method">ToString</span>(<span class="string">"C"</span>);
+            compDiscountLbl.Text  = (companyDiscount * <span class="number">100</span>).<span class="method">ToString</span>(<span class="string">"F0"</span>) + <span class="string">"%"</span>;
+            lengthDiscLbl.Text    = lengthSavings.<span class="method">ToString</span>(<span class="string">"C"</span>);
+            finalPriceLbl.Text    = finalPrice.<span class="method">ToString</span>(<span class="string">"C"</span>);
+            totalSavingsLbl.Text  = totalSavings.<span class="method">ToString</span>(<span class="string">"C"</span>);
+        }
+    }
+}</div>
+
+<!-- ── Interactive Form ── -->
+<div class="section-title">// Interactive Demo — Try It Live</div>
+<div class="form-wrapper">
+    <div class="form-titlebar">
+        <span>Contract Calculator</span>
+        <div class="titlebar-btns">
+            <button>_</button>
+            <button>□</button>
+            <button style="background:#e05252;color:#fff;">✕</button>
+        </div>
+    </div>
+    <div class="form-body">
+        <div class="form-header">SHIPPING CONTRACT CALCULATOR</div>
+
+        <div class="input-section">
+            <div class="form-row">
+                <label class="form-label" for="providerSelect">Provider:</label>
+                <select class="form-select" id="providerSelect">
+                    <option value="" disabled selected></option>
+                    <option value="0">USPS</option>
+                    <option value="1">DHL</option>
+                    <option value="2">FedEx</option>
+                    <option value="3">UPS</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label class="form-label" for="businessSelect">Business:</label>
+                <select class="form-select" id="businessSelect">
+                    <option value="" disabled selected></option>
+                    <option value="0">John's Books ($55,000)</option>
+                    <option value="1">Office Supplies ($87,880)</option>
+                    <option value="2">J.B. Car Parts ($65,000)</option>
+                    <option value="3">Gevalia Coffee ($90,000)</option>
+                    <option value="4">Ceylon Tea ($75,500)</option>
+                    <option value="5">My Footwear ($40,550)</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label class="form-label" for="contractLength">Contract Length:</label>
+                <input class="form-input" id="contractLength" type="number" min="0" placeholder="years" style="max-width:120px;">
+            </div>
+        </div>
+
+        <button class="btn-calculate" onclick="calculate()">Calculate</button>
+        <div class="error-msg" id="errorMsg"></div>
+
+        <hr class="divider">
+
+        <div class="result-row">
+            <span class="result-label">Shipping Provider:</span>
+            <div class="result-box" id="r-provider"></div>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Initial Contract Price:</span>
+            <div class="result-box" id="r-initial"></div>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Company Discount:</span>
+            <div class="result-box" id="r-compDiscount"></div>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Length Discount:</span>
+            <div class="result-box" id="r-lengthDiscount"></div>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Final Price:</span>
+            <div class="result-box" id="r-final"></div>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Total Savings:</span>
+            <div class="result-box" id="r-savings"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const shippingCompanies = ["USPS", "DHL", "FedEx", "UPS"];
+    const discountRates     = [0.25, 0.20, 0.17, 0.15];
+    const businessNames     = ["John's Books","Office Supplies","J.B. Car Parts","Gevalia Coffee","Ceylon Tea","My Footwear"];
+    const initialPrices     = [55000, 87880, 65000, 90000, 75500, 40550];
+    const contractLengthLowEnd = [0, 2, 5, 8];
+    const savings              = [0, 5000, 10000, 15000];
+
+    function currency(val) {
+        return '$' + val.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function showError(msg) {
+        const el = document.getElementById('errorMsg');
+        el.textContent = '⚠ ' + msg;
+        el.classList.add('show');
+    }
+
+    function clearError() {
+        const el = document.getElementById('errorMsg');
+        el.textContent = '';
+        el.classList.remove('show');
+    }
+
+    function setResult(id, val) {
+        document.getElementById(id).textContent = val;
+    }
+
+    function calculate() {
+        clearError();
+
+        const shipIdx = parseInt(document.getElementById('providerSelect').value);
+        const bizIdx  = parseInt(document.getElementById('businessSelect').value);
+        const lengthRaw = document.getElementById('contractLength').value.trim();
+
+        if (isNaN(shipIdx)) { showError('Please select a shipping provider.'); return; }
+        if (isNaN(bizIdx))  { showError('Please select a business.'); return; }
+
+        const contractLength = parseFloat(lengthRaw);
+        if (isNaN(contractLength) || contractLength < 0) {
+            showError('Please enter a valid contract length in years.');
+            return;
+        }
+
+        const initialPrice    = initialPrices[bizIdx];
+        const companyDiscount = discountRates[shipIdx];
+
+        // find length discount tier
+        let lengthSavingsAmt = 0;
+        for (let i = contractLengthLowEnd.length - 1; i >= 0; i--) {
+            if (contractLength >= contractLengthLowEnd[i]) {
+                lengthSavingsAmt = savings[i];
+                break;
+            }
+        }
+
+        const discountedPrice = initialPrice * (1 - companyDiscount);
+        const finalPrice      = discountedPrice - lengthSavingsAmt;
+        const totalSavings    = initialPrice - finalPrice;
+
+        setResult('r-provider',       shippingCompanies[shipIdx]);
+        setResult('r-initial',        currency(initialPrice));
+        setResult('r-compDiscount',   (companyDiscount * 100).toFixed(0) + '%  (' + currency(initialPrice * companyDiscount) + ' off)');
+        setResult('r-lengthDiscount', currency(lengthSavingsAmt));
+        setResult('r-final',          currency(finalPrice));
+        setResult('r-savings',        currency(totalSavings));
+    }
+</script>
+</body>
+</html>
