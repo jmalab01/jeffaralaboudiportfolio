@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIMTAY Database Schema — CIS 310</title>
+<style>
+  /* ── PDF-style page ── */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e8e8e8;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 12px;
+    color: #1a1a1a;
+    padding: 20px 0 40px;
+  }
+
+  /* Page shadow wrapper */
+  .page {
+    background: #fff;
+    width: 850px;
+    margin: 0 auto;
+    padding: 52px 60px 60px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.28);
+    border-radius: 3px;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #101D42;
+    padding-bottom: 14px;
+    margin-bottom: 28px;
+  }
+  .doc-header .left h1 {
+    font-size: 24px;
+    color: #101D42;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+  .doc-header .left .sub {
+    color: #6564DB;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 3px;
+  }
+  .doc-header .right {
+    text-align: right;
+    color: #555;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .doc-header .right strong { color: #101D42; }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: #101D42;
+    padding: 6px 12px;
+    border-radius: 3px;
+    margin: 28px 0 12px;
+    letter-spacing: 0.4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .badge {
+    background: #6564DB;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* ── ER Overview box ── */
+  .er-overview {
+    background: #f7f8ff;
+    border: 1px solid #dde0f7;
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin-bottom: 8px;
+    line-height: 1.9;
+  }
+  .er-overview p { margin-bottom: 6px; color: #333; font-size: 11.5px; }
+  .er-overview ul { padding-left: 22px; }
+  .er-overview ul li { margin-bottom: 3px; }
+  .rel-arrow { color: #6564DB; font-weight: 700; }
+
+  /* ── Table block ── */
+  .table-block {
+    margin-bottom: 26px;
+    border: 1px solid #d0d4e8;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .table-block .table-header {
+    background: linear-gradient(90deg, #6564DB 0%, #89D2DC 100%);
+    color: #fff;
+    padding: 8px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .table-block .table-header .pk-indicator {
+    background: rgba(255,255,255,0.25);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  /* Column definition table */
+  table.schema-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+  }
+  table.schema-table thead tr {
+    background: #f0f1fa;
+  }
+  table.schema-table th {
+    padding: 7px 12px;
+    text-align: left;
+    font-weight: 700;
+    color: #444;
+    border-bottom: 1px solid #dde0f7;
+    white-space: nowrap;
+  }
+  table.schema-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #ebebeb;
+    vertical-align: top;
+  }
+  table.schema-table tr:last-child td { border-bottom: none; }
+  table.schema-table tr:hover td { background: #fafbff; }
+  .pk { color: #c0392b; font-weight: 700; }
+  .fk { color: #2980b9; font-weight: 700; }
+  .type-badge {
+    display: inline-block;
+    background: #eef0fa;
+    color: #444;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10.5px;
+    font-family: 'Courier New', monospace;
+  }
+  .col-pk-row td { background: #fff9f9 !important; }
+  .col-fk-row td { background: #f5faff !important; }
+
+  /* ── Sample data table ── */
+  .data-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6564DB;
+    padding: 8px 14px 4px;
+    background: #fafbff;
+    border-top: 1px solid #e8eaf6;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5px;
+  }
+  table.data-table thead tr { background: #edf0f7; }
+  table.data-table th {
+    padding: 5px 10px;
+    text-align: left;
+    font-weight: 700;
+    color: #555;
+    border-bottom: 1px solid #dde0f7;
+    white-space: nowrap;
+  }
+  table.data-table td {
+    padding: 4px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    white-space: nowrap;
+  }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table tr:nth-child(even) td { background: #f9f9fd; }
+
+  /* ── SQL block ── */
+  .sql-block {
+    background: #1e1e2e;
+    border-radius: 5px;
+    padding: 18px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    color: #cdd6f4;
+    overflow-x: auto;
+    margin-bottom: 8px;
+  }
+  .sql-keyword { color: #89b4fa; font-weight: bold; }
+  .sql-type    { color: #fab387; }
+  .sql-string  { color: #a6e3a1; }
+  .sql-number  { color: #f38ba8; }
+  .sql-comment { color: #6c7086; font-style: italic; }
+  .sql-paren   { color: #cba6f7; }
+  .sql-table   { color: #f9e2af; font-weight: bold; }
+
+  /* ── Footer ── */
+  .doc-footer {
+    border-top: 2px solid #101D42;
+    margin-top: 36px;
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    color: #888;
+    font-size: 10.5px;
+  }
+  .doc-footer a { color: #6564DB; text-decoration: none; }
+
+  /* ── Print button ── */
+  .print-bar {
+    width: 850px;
+    margin: 0 auto 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .btn-print {
+    background: #101D42;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .btn-print:hover { background: #6564DB; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .print-bar { display: none; }
+    .page { box-shadow: none; padding: 30px 40px; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Print bar -->
+<div class="print-bar">
+  <button class="btn-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="doc-header">
+    <div class="left">
+      <h1>KIMTAY Database Schema</h1>
+      <div class="sub">CIS 310 — Database Management Systems</div>
+    </div>
+    <div class="right">
+      <strong>University of Louisville</strong><br>
+      Jeffar Alaboudi<br>
+      Spring 2025
+    </div>
+  </div>
+
+  <!-- ── ER OVERVIEW ── -->
+  <div class="section-title">Entity-Relationship Overview <span class="badge">5 Tables</span></div>
+  <div class="er-overview">
+    <p>The <strong>KIMTAY</strong> database models a pet supply company's sales operations. It tracks sales representatives, customers, inventory items, invoices, and invoice line items.</p>
+    <ul>
+      <li><strong>SALES_REP</strong> <span class="rel-arrow">→</span> <strong>CUSTOMER</strong> &nbsp;(one rep manages many customers via <code>REP_ID</code>)</li>
+      <li><strong>CUSTOMER</strong> <span class="rel-arrow">→</span> <strong>INVOICES</strong> &nbsp;(one customer has many invoices via <code>CUST_ID</code>)</li>
+      <li><strong>INVOICES</strong> <span class="rel-arrow">→</span> <strong>INVOICE_LINE</strong> &nbsp;(one invoice has many line items via <code>INVOICE_NUM</code>)</li>
+      <li><strong>ITEM</strong> <span class="rel-arrow">→</span> <strong>INVOICE_LINE</strong> &nbsp;(one item appears on many line items via <code>ITEM_ID</code>)</li>
+    </ul>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TABLE 1 — SALES_REP
+  ════════════════════════════════════ -->
+  <div class="section-title">Table Definitions</div>
+
+  <div class="table-block">
+    <div class="table-header">SALES_REP <span class="pk-indicator">PK: REP_ID</span></div>
+    <table class="schema-table">
+      <thead>
+        <tr>
+          <th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">REP_ID</span></td>
+          <td><span class="type-badge">CHAR(2)</span></td>
+          <td>PRIMARY KEY</td>
+          <td>Unique sales representative identifier</td>
+        </tr>
+        <tr><td>FIRST_NAME</td><td><span class="type-badge">VARCHAR(20)</span></td><td>—</td><td>Representative's first name</td></tr>
+        <tr><td>LAST_NAME</td><td><span class="type-badge">VARCHAR(20)</span></td><td>—</td><td>Representative's last name</td></tr>
+        <tr><td>ADDRESS</td><td><span class="type-badge">VARCHAR(20)</span></td><td>—</td><td>Street address</td></tr>
+        <tr><td>CITY</td><td><span class="type-badge">VARCHAR(15)</span></td><td>—</td><td>City</td></tr>
+        <tr><td>STATE</td><td><span class="type-badge">CHAR(2)</span></td><td>—</td><td>State abbreviation</td></tr>
+        <tr><td>POSTAL</td><td><span class="type-badge">CHAR(5)</span></td><td>—</td><td>ZIP code</td></tr>
+        <tr><td>CELL_PHONE</td><td><span class="type-badge">CHAR(12)</span></td><td>—</td><td>Phone number (XXX-XXX-XXXX)</td></tr>
+        <tr><td>COMMISSION</td><td><span class="type-badge">DECIMAL(7,2)</span></td><td>—</td><td>Total commission earned</td></tr>
+        <tr><td>RATE</td><td><span class="type-badge">DECIMAL(3,2)</span></td><td>—</td><td>Commission rate (e.g. 0.04 = 4%)</td></tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (4 rows)</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>REP_ID</th><th>FIRST_NAME</th><th>LAST_NAME</th><th>CITY</th><th>STATE</th><th>COMMISSION</th><th>RATE</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>05</td><td>Susan</td><td>Garcia</td><td>Cody</td><td>WY</td><td>$12,743.16</td><td>0.04</td></tr>
+        <tr><td>10</td><td>Richard</td><td>Miller</td><td>Ralston</td><td>WY</td><td>$20,872.11</td><td>0.06</td></tr>
+        <tr><td>15</td><td>Donna</td><td>Smith</td><td>Powell</td><td>WY</td><td>$14,912.92</td><td>0.04</td></tr>
+        <tr><td>20</td><td>Daniel</td><td>Jackson</td><td>Elk Butte</td><td>WY</td><td>$0.00</td><td>0.04</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TABLE 2 — CUSTOMER
+  ════════════════════════════════════ -->
+  <div class="table-block">
+    <div class="table-header">CUSTOMER <span class="pk-indicator">PK: CUST_ID &nbsp;|&nbsp; FK: REP_ID</span></div>
+    <table class="schema-table">
+      <thead>
+        <tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">CUST_ID</span></td>
+          <td><span class="type-badge">CHAR(3)</span></td>
+          <td>PRIMARY KEY</td>
+          <td>Unique customer identifier</td>
+        </tr>
+        <tr><td>FIRST_NAME</td><td><span class="type-badge">VARCHAR(20)</span></td><td>—</td><td>Customer first name</td></tr>
+        <tr><td>LAST_NAME</td><td><span class="type-badge">VARCHAR(20)</span></td><td>—</td><td>Customer last name</td></tr>
+        <tr><td>ADDRESS</td><td><span class="type-badge">VARCHAR(20)</span></td><td>—</td><td>Street address</td></tr>
+        <tr><td>CITY</td><td><span class="type-badge">VARCHAR(15)</span></td><td>—</td><td>City</td></tr>
+        <tr><td>STATE</td><td><span class="type-badge">CHAR(2)</span></td><td>—</td><td>State abbreviation</td></tr>
+        <tr><td>POSTAL</td><td><span class="type-badge">CHAR(5)</span></td><td>—</td><td>ZIP code</td></tr>
+        <tr><td>EMAIL</td><td><span class="type-badge">VARCHAR(30)</span></td><td>—</td><td>Email address</td></tr>
+        <tr><td>BALANCE</td><td><span class="type-badge">DECIMAL(7,2)</span></td><td>—</td><td>Current account balance</td></tr>
+        <tr><td>CREDIT_LIMIT</td><td><span class="type-badge">DECIMAL(7,2)</span></td><td>—</td><td>Maximum allowed credit</td></tr>
+        <tr class="col-fk-row">
+          <td><span class="fk">REP_ID</span></td>
+          <td><span class="type-badge">CHAR(2)</span></td>
+          <td>FOREIGN KEY → SALES_REP</td>
+          <td>Assigned sales representative</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (12 rows)</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>CUST_ID</th><th>FIRST_NAME</th><th>LAST_NAME</th><th>CITY</th><th>BALANCE</th><th>CREDIT_LIMIT</th><th>REP_ID</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>125</td><td>Joey</td><td>Smith</td><td>Cody</td><td>$80.68</td><td>$500.00</td><td>05</td></tr>
+        <tr><td>182</td><td>Billy</td><td>Rufton</td><td>Garland</td><td>$43.13</td><td>$750.00</td><td>10</td></tr>
+        <tr><td>227</td><td>Sandra</td><td>Pincher</td><td>Powell</td><td>$156.38</td><td>$500.00</td><td>15</td></tr>
+        <tr><td>294</td><td>Samantha</td><td>Smith</td><td>Ralston</td><td>$58.60</td><td>$500.00</td><td>10</td></tr>
+        <tr><td>314</td><td>Tom</td><td>Rascal</td><td>Cody</td><td>$17.25</td><td>$250.00</td><td>15</td></tr>
+        <tr><td>375</td><td>Melanie</td><td>Jackson</td><td>Elk Butte</td><td>$252.25</td><td>$250.00</td><td>05</td></tr>
+        <tr><td>435</td><td>James</td><td>Gonzalez</td><td>Wapiti</td><td>$230.40</td><td>$1,000.00</td><td>15</td></tr>
+        <tr><td>492</td><td>Elmer</td><td>Jackson</td><td>Garland</td><td>$45.20</td><td>$500.00</td><td>10</td></tr>
+        <tr><td>543</td><td>Angie</td><td>Hendricks</td><td>Powell</td><td>$315.00</td><td>$750.00</td><td>05</td></tr>
+        <tr><td>616</td><td>Sally</td><td>Cruz</td><td>Ralston</td><td>$8.33</td><td>$500.00</td><td>15</td></tr>
+        <tr><td>721</td><td>Leslie</td><td>Smith</td><td>Elk Butte</td><td>$166.65</td><td>$1,000.00</td><td>10</td></tr>
+        <tr><td>795</td><td>Randy</td><td>Blacksmith</td><td>Cody</td><td>$61.50</td><td>$500.00</td><td>05</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TABLE 3 — ITEM
+  ════════════════════════════════════ -->
+  <div class="table-block">
+    <div class="table-header">ITEM <span class="pk-indicator">PK: ITEM_ID</span></div>
+    <table class="schema-table">
+      <thead>
+        <tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">ITEM_ID</span></td>
+          <td><span class="type-badge">CHAR(4)</span></td>
+          <td>PRIMARY KEY</td>
+          <td>Unique item identifier</td>
+        </tr>
+        <tr><td>DESCRIPTION</td><td><span class="type-badge">VARCHAR(30)</span></td><td>—</td><td>Product name/description</td></tr>
+        <tr><td>ON_HAND</td><td><span class="type-badge">NUMERIC</span></td><td>—</td><td>Quantity currently in stock</td></tr>
+        <tr><td>CATEGORY</td><td><span class="type-badge">CHAR(3)</span></td><td>—</td><td>Product category (DOG, CAT, BRD, HOR, FSH)</td></tr>
+        <tr><td>LOCATION</td><td><span class="type-badge">CHAR(1)</span></td><td>—</td><td>Warehouse aisle (A, B, or C)</td></tr>
+        <tr><td>PRICE</td><td><span class="type-badge">DECIMAL(7,2)</span></td><td>—</td><td>Unit sale price</td></tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (15 rows)</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>ITEM_ID</th><th>DESCRIPTION</th><th>ON_HAND</th><th>CATEGORY</th><th>LOC</th><th>PRICE</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>AD72</td><td>Dog Feeding Station</td><td>12</td><td>DOG</td><td>B</td><td>$79.99</td></tr>
+        <tr><td>BC33</td><td>Feathers Bird Cage (12x24x18)</td><td>10</td><td>BRD</td><td>B</td><td>$79.99</td></tr>
+        <tr><td>CA75</td><td>Enclosed Cat Litter Station</td><td>15</td><td>CAT</td><td>C</td><td>$39.99</td></tr>
+        <tr><td>DT12</td><td>Dog Toy Gift Set</td><td>27</td><td>DOG</td><td>B</td><td>$39.99</td></tr>
+        <tr><td>FM23</td><td>Fly Mask with Ears</td><td>41</td><td>HOR</td><td>C</td><td>$24.95</td></tr>
+        <tr><td>FS39</td><td>Folding Saddle Stand</td><td>12</td><td>HOR</td><td>C</td><td>$39.99</td></tr>
+        <tr><td>FS42</td><td>Aquarium (55 Gallon)</td><td>5</td><td>FSH</td><td>A</td><td>$124.99</td></tr>
+        <tr><td>KH81</td><td>Wild Bird Food (25 lb)</td><td>24</td><td>BRD</td><td>C</td><td>$19.99</td></tr>
+        <tr><td>LD14</td><td>Locking Small Dog Door</td><td>14</td><td>DOG</td><td>A</td><td>$49.99</td></tr>
+        <tr><td>LP73</td><td>Large Pet Carrier</td><td>23</td><td>DOG</td><td>B</td><td>$59.99</td></tr>
+        <tr><td>PF19</td><td>Pump &amp; Filter Kit</td><td>5</td><td>FSH</td><td>A</td><td>$74.99</td></tr>
+        <tr><td>QB92</td><td>Quilted Stable Blanket</td><td>32</td><td>HOR</td><td>C</td><td>$119.99</td></tr>
+        <tr><td>SP91</td><td>Small Pet Carrier</td><td>18</td><td>CAT</td><td>B</td><td>$39.99</td></tr>
+        <tr><td>UF39</td><td>Underground Fence System</td><td>7</td><td>DOG</td><td>A</td><td>$199.99</td></tr>
+        <tr><td>WB49</td><td>Insulated Water Bucket</td><td>34</td><td>HOR</td><td>C</td><td>$79.99</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TABLE 4 — INVOICES
+  ════════════════════════════════════ -->
+  <div class="table-block">
+    <div class="table-header">INVOICES <span class="pk-indicator">PK: INVOICE_NUM &nbsp;|&nbsp; FK: CUST_ID</span></div>
+    <table class="schema-table">
+      <thead>
+        <tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="col-pk-row">
+          <td><span class="pk">INVOICE_NUM</span></td>
+          <td><span class="type-badge">CHAR(5)</span></td>
+          <td>PRIMARY KEY</td>
+          <td>Unique invoice number</td>
+        </tr>
+        <tr><td>INVOICE_DATE</td><td><span class="type-badge">DATE</span></td><td>—</td><td>Date the invoice was created</td></tr>
+        <tr class="col-fk-row">
+          <td><span class="fk">CUST_ID</span></td>
+          <td><span class="type-badge">CHAR(3)</span></td>
+          <td>FOREIGN KEY → CUSTOMER</td>
+          <td>Customer who placed the order</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (8 rows)</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>INVOICE_NUM</th><th>INVOICE_DATE</th><th>CUST_ID</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>14216</td><td>2021-11-15</td><td>125</td></tr>
+        <tr><td>14219</td><td>2021-11-15</td><td>227</td></tr>
+        <tr><td>14222</td><td>2021-11-16</td><td>294</td></tr>
+        <tr><td>14224</td><td>2021-11-16</td><td>182</td></tr>
+        <tr><td>14228</td><td>2021-11-18</td><td>435</td></tr>
+        <tr><td>14231</td><td>2021-11-18</td><td>125</td></tr>
+        <tr><td>14233</td><td>2021-11-18</td><td>435</td></tr>
+        <tr><td>14237</td><td>2021-11-19</td><td>616</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════════════════════════════════════
+       TABLE 5 — INVOICE_LINE
+  ════════════════════════════════════ -->
+  <div class="table-block">
+    <div class="table-header">INVOICE_LINE <span class="pk-indicator">PK: (INVOICE_NUM, ITEM_ID) &nbsp;|&nbsp; FK: INVOICE_NUM, ITEM_ID</span></div>
+    <table class="schema-table">
+      <thead>
+        <tr><th>Column</th><th>Data Type</th><th>Constraint</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="col-pk-row col-fk-row">
+          <td><span class="pk">INVOICE_NUM</span></td>
+          <td><span class="type-badge">CHAR(5)</span></td>
+          <td>PK + FK → INVOICES</td>
+          <td>Invoice this line belongs to</td>
+        </tr>
+        <tr class="col-pk-row col-fk-row">
+          <td><span class="pk">ITEM_ID</span></td>
+          <td><span class="type-badge">CHAR(4)</span></td>
+          <td>PK + FK → ITEM</td>
+          <td>Item ordered on this line</td>
+        </tr>
+        <tr><td>QUANTITY</td><td><span class="type-badge">NUMERIC</span></td><td>—</td><td>Number of units ordered</td></tr>
+        <tr><td>QUOTED_PRICE</td><td><span class="type-badge">DECIMAL(7,2)</span></td><td>—</td><td>Actual price charged (may differ from list)</td></tr>
+      </tbody>
+    </table>
+    <div class="data-label">Sample Data (12 rows)</div>
+    <table class="data-table">
+      <thead>
+        <tr><th>INVOICE_NUM</th><th>ITEM_ID</th><th>QUANTITY</th><th>QUOTED_PRICE</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>14216</td><td>CA75</td><td>3</td><td>$37.99</td></tr>
+        <tr><td>14219</td><td>AD72</td><td>2</td><td>$79.99</td></tr>
+        <tr><td>14219</td><td>DT12</td><td>4</td><td>$39.99</td></tr>
+        <tr><td>14222</td><td>LD14</td><td>1</td><td>$47.99</td></tr>
+        <tr><td>14224</td><td>KH81</td><td>4</td><td>$18.99</td></tr>
+        <tr><td>14228</td><td>FS42</td><td>1</td><td>$124.99</td></tr>
+        <tr><td>14228</td><td>PF19</td><td>1</td><td>$74.99</td></tr>
+        <tr><td>14231</td><td>UF39</td><td>2</td><td>$189.99</td></tr>
+        <tr><td>14233</td><td>KH81</td><td>1</td><td>$19.99</td></tr>
+        <tr><td>14233</td><td>QB92</td><td>4</td><td>$109.95</td></tr>
+        <tr><td>14233</td><td>WB49</td><td>4</td><td>$74.95</td></tr>
+        <tr><td>14237</td><td>LP73</td><td>3</td><td>$54.95</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── CREATE SCRIPT ── -->
+  <div class="section-title">SQL CREATE Script</div>
+  <div class="sql-block">
+<span class="sql-comment">-- ══ KIMTAY Database Schema (SQL Server) ══</span>
+<span class="sql-keyword">BEGIN TRANSACTION</span>;
+
+<span class="sql-comment">-- SALES_REP</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">SALES_REP</span> <span class="sql-paren">(</span>
+   REP_ID      <span class="sql-type">CHAR(2)</span>       <span class="sql-keyword">PRIMARY KEY</span>,
+   FIRST_NAME  <span class="sql-type">VARCHAR(20)</span>,
+   LAST_NAME   <span class="sql-type">VARCHAR(20)</span>,
+   ADDRESS     <span class="sql-type">VARCHAR(20)</span>,
+   CITY        <span class="sql-type">VARCHAR(15)</span>,
+   STATE       <span class="sql-type">CHAR(2)</span>,
+   POSTAL      <span class="sql-type">CHAR(5)</span>,
+   CELL_PHONE  <span class="sql-type">CHAR(12)</span>,
+   COMMISSION  <span class="sql-type">DECIMAL(7,2)</span>,
+   RATE        <span class="sql-type">DECIMAL(3,2)</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- CUSTOMER</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">CUSTOMER</span> <span class="sql-paren">(</span>
+   CUST_ID      <span class="sql-type">CHAR(3)</span>       <span class="sql-keyword">PRIMARY KEY</span>,
+   FIRST_NAME   <span class="sql-type">VARCHAR(20)</span>,
+   LAST_NAME    <span class="sql-type">VARCHAR(20)</span>,
+   ADDRESS      <span class="sql-type">VARCHAR(20)</span>,
+   CITY         <span class="sql-type">VARCHAR(15)</span>,
+   STATE        <span class="sql-type">CHAR(2)</span>,
+   POSTAL       <span class="sql-type">CHAR(5)</span>,
+   EMAIL        <span class="sql-type">VARCHAR(30)</span>,
+   BALANCE      <span class="sql-type">DECIMAL(7,2)</span>,
+   CREDIT_LIMIT <span class="sql-type">DECIMAL(7,2)</span>,
+   REP_ID       <span class="sql-type">CHAR(2)</span>       <span class="sql-comment">-- FK → SALES_REP</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- ITEM</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">ITEM</span> <span class="sql-paren">(</span>
+   ITEM_ID     <span class="sql-type">CHAR(4)</span>       <span class="sql-keyword">PRIMARY KEY</span>,
+   DESCRIPTION <span class="sql-type">VARCHAR(30)</span>,
+   ON_HAND     <span class="sql-type">NUMERIC</span>,
+   CATEGORY    <span class="sql-type">CHAR(3)</span>,
+   LOCATION    <span class="sql-type">CHAR(1)</span>,
+   PRICE       <span class="sql-type">DECIMAL(7,2)</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- INVOICES</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">INVOICES</span> <span class="sql-paren">(</span>
+   INVOICE_NUM  <span class="sql-type">CHAR(5)</span>  <span class="sql-keyword">PRIMARY KEY</span>,
+   INVOICE_DATE <span class="sql-type">DATE</span>,
+   CUST_ID      <span class="sql-type">CHAR(3)</span>  <span class="sql-comment">-- FK → CUSTOMER</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-comment">-- INVOICE_LINE (composite PK)</span>
+<span class="sql-keyword">CREATE TABLE</span> <span class="sql-table">INVOICE_LINE</span> <span class="sql-paren">(</span>
+   INVOICE_NUM  <span class="sql-type">CHAR(5)</span>,
+   ITEM_ID      <span class="sql-type">CHAR(4)</span>,
+   QUANTITY     <span class="sql-type">NUMERIC</span>,
+   QUOTED_PRICE <span class="sql-type">DECIMAL(7,2)</span>,
+   <span class="sql-keyword">PRIMARY KEY</span> <span class="sql-paren">(</span>INVOICE_NUM, ITEM_ID<span class="sql-paren">)</span>
+<span class="sql-paren">)</span>;
+
+<span class="sql-keyword">COMMIT TRANSACTION</span>;
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="doc-footer">
+    <span>KIMTAY Database Schema &mdash; CIS 310 &mdash; University of Louisville</span>
+    <span>Jeffar Alaboudi &mdash; Spring 2025</span>
+  </div>
+
+</div><!-- end .page -->
+</body>
+</html>
