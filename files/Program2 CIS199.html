@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program 2 - CIS 199 | Jeffar Alaboudi</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            padding: 32px;
+            min-height: 100vh;
+        }
+        h1 { color: #569cd6; font-size: 1.4rem; margin-bottom: 4px; }
+        .meta { color: #888; font-size: 0.85rem; margin-bottom: 28px; }
+        .section-title { color: #9cdcfe; font-size: 1.05rem; margin: 28px 0 10px; }
+
+        /* ── Source Code ── */
+        .code-block {
+            background: #252526;
+            border: 1px solid #3c3c3c;
+            border-radius: 8px;
+            padding: 20px 24px;
+            white-space: pre;
+            line-height: 1.75;
+            font-size: 0.88rem;
+            overflow-x: auto;
+        }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .type    { color: #4ec9b0; }
+        .string  { color: #ce9178; }
+        .number  { color: #b5cea8; }
+        .method  { color: #dcdcaa; }
+
+        /* ── Windows Form UI ── */
+        .form-wrapper {
+            background: #f0f0f0;
+            border: 2px solid #999;
+            border-radius: 4px;
+            max-width: 420px;
+            overflow: hidden;
+            box-shadow: 4px 4px 16px rgba(0,0,0,0.5);
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .form-titlebar {
+            background: #0078d4;
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-titlebar-btns { display: flex; gap: 6px; }
+        .form-titlebar-btns span {
+            width: 14px; height: 14px; border-radius: 50%;
+            display: inline-block; cursor: default;
+        }
+        .btn-min { background: #ffc107; }
+        .btn-max { background: #28a745; }
+        .btn-cls { background: #dc3545; }
+
+        .form-body { padding: 16px 20px 20px; }
+
+        .form-header {
+            background: #e05252;
+            color: #fff;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-align: center;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            border-radius: 2px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+        .form-label {
+            width: 110px;
+            text-align: right;
+            font-size: 0.88rem;
+            color: #1a1a1a;
+            flex-shrink: 0;
+        }
+        .form-input, .form-select {
+            flex: 1;
+            border: 1px solid #999;
+            border-radius: 2px;
+            padding: 4px 8px;
+            font-size: 0.88rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            outline: none;
+        }
+        .form-input:focus, .form-select:focus { border-color: #0078d4; }
+
+        .form-section-label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            text-decoration: underline;
+            color: #1a1a1a;
+            margin: 14px 0 6px 0;
+        }
+        .checkbox-row {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 4px;
+            padding-left: 8px;
+        }
+        .checkbox-row label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.88rem;
+            color: #1a1a1a;
+            cursor: pointer;
+        }
+        .checkbox-row input[type="checkbox"] { cursor: pointer; }
+
+        .btn-log {
+            display: block;
+            background: #5cb85c;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 7px 22px;
+            font-size: 0.9rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 14px 0 12px 0;
+            transition: background 0.2s;
+        }
+        .btn-log:hover { background: #4cae4c; }
+
+        .results-label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            text-decoration: underline;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        .result-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 8px;
+        }
+        .result-field-label {
+            width: 90px;
+            text-align: right;
+            font-size: 0.85rem;
+            color: #1a1a1a;
+            flex-shrink: 0;
+        }
+        .result-box {
+            flex: 1;
+            border: 1px solid #aaa;
+            border-radius: 2px;
+            padding: 3px 8px;
+            font-size: 0.85rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            min-height: 24px;
+        }
+
+        .error-msg {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.84rem;
+            color: #856404;
+            margin-top: 8px;
+            display: none;
+        }
+        .error-msg.show { display: block; }
+    </style>
+</head>
+<body>
+
+<h1>Program 2 — FitPoints Tracker</h1>
+<div class="meta">CIS 199 &nbsp;|&nbsp; Jeffar Alaboudi &nbsp;|&nbsp; Windows Forms Application</div>
+
+<!-- ── Source Code ── -->
+<div class="section-title">// Source Code — Form1.cs</div>
+<div class="code-block"><span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Collections.Generic;
+<span class="keyword">using</span> System.ComponentModel;
+<span class="keyword">using</span> System.Data;
+<span class="keyword">using</span> System.Drawing;
+<span class="keyword">using</span> System.Linq;
+<span class="keyword">using</span> System.Text;
+<span class="keyword">using</span> System.Threading.Tasks;
+<span class="keyword">using</span> System.Windows.Forms;
+
+<span class="keyword">namespace</span> <span class="type">program2</span>
+{
+    <span class="keyword">public partial class</span> <span class="type">Form1</span> : <span class="type">Form</span>
+    {
+        <span class="keyword">public</span> <span class="method">Form1</span>()
+        {
+            <span class="method">InitializeComponent</span>();
+        }
+
+        <span class="keyword">private void</span> <span class="method">button1_Click</span>(<span class="keyword">object</span> sender, <span class="type">EventArgs</span> e)
+        {
+            <span class="keyword">const int</span> MinimumAge = <span class="number">18</span>;
+            <span class="keyword">const int</span> MaximumAge = <span class="number">120</span>;
+
+            <span class="comment">// constant variables for exercise point values</span>
+            <span class="keyword">const int</span> RunningPoints      = <span class="number">10</span>;
+            <span class="keyword">const int</span> WeightTrainingPoints = <span class="number">20</span>;
+            <span class="keyword">const int</span> CyclingPoints        = <span class="number">5</span>;
+            <span class="keyword">const int</span> YogaPoints           = <span class="number">2</span>;
+            <span class="keyword">const int</span> OtherPoints          = <span class="number">5</span>;
+
+            typepick.Items.<span class="method">AddRange</span>(<span class="keyword">new object</span>[] {
+                <span class="string">"Running"</span>, <span class="string">"Weight Training"</span>, <span class="string">"Cycling"</span>, <span class="string">"Yoga"</span>, <span class="string">"Other"</span>
+            });
+
+            <span class="keyword">string</span> name = nametb.Text.<span class="method">Trim</span>();
+            <span class="keyword">int</span> age;
+
+            <span class="comment">// age using constant variables</span>
+            <span class="keyword">if</span> (!int.<span class="method">TryParse</span>(agetb.Text, <span class="keyword">out</span> age) || age &lt; MinimumAge || age &gt; MaximumAge)
+            {
+                MessageBox.<span class="method">Show</span>(<span class="string">"Please enter a valid age between 18 and 120."</span>,
+                    <span class="string">"Error"</span>, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                <span class="keyword">return</span>;
+            }
+
+            <span class="keyword">if</span> (typepick.SelectedIndex &lt; <span class="number">0</span>)
+            {
+                MessageBox.<span class="method">Show</span>(<span class="string">"Please select an exercise type."</span>,
+                    <span class="string">"Error"</span>, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                <span class="keyword">return</span>;
+            }
+
+            <span class="comment">// calculate points based on exercise type and duration</span>
+            <span class="keyword">int</span> duration;
+            int.<span class="method">TryParse</span>(durationtb.Text, <span class="keyword">out</span> duration);
+
+            <span class="keyword">int</span> pointsPerMin = typepick.SelectedItem.<span class="method">ToString</span>() <span class="keyword">switch</span>
+            {
+                <span class="string">"Running"</span>        =&gt; RunningPoints,
+                <span class="string">"Weight Training"</span> =&gt; WeightTrainingPoints,
+                <span class="string">"Cycling"</span>        =&gt; CyclingPoints,
+                <span class="string">"Yoga"</span>           =&gt; YogaPoints,
+                _                =&gt; OtherPoints
+            };
+
+            <span class="keyword">int</span> points  = pointsPerMin * duration;
+            <span class="keyword">bool</span> hydrated = hydratedYes.Checked;
+            <span class="keyword">bool</span> smokes   = smokesYes.Checked;
+
+            <span class="keyword">if</span> (hydrated) points += <span class="number">5</span>;
+            <span class="keyword">if</span> (smokes)   points -= <span class="number">10</span>;
+
+            <span class="keyword">string</span> advice = smokes
+                ? <span class="string">"Quitting smoking will greatly improve your fitness results!"</span>
+                : hydrated
+                    ? <span class="string">"Great job staying hydrated! Keep it up."</span>
+                    : <span class="string">"Remember to drink water during exercise."</span>;
+
+            pointstb.Text  = points.<span class="method">ToString</span>();
+            advicetb.Text  = advice;
+        }
+    }
+}</div>
+
+<!-- ── Interactive Form ── -->
+<div class="section-title">// Interactive Demo — Try It Live</div>
+<div class="form-wrapper">
+    <div class="form-titlebar">
+        <span>Form1</span>
+        <div class="form-titlebar-btns">
+            <span class="btn-min"></span>
+            <span class="btn-max"></span>
+            <span class="btn-cls"></span>
+        </div>
+    </div>
+    <div class="form-body">
+        <div class="form-header">FITPOINTS TRACKER</div>
+
+        <div class="form-row">
+            <label class="form-label" for="nameInput">Name:</label>
+            <input class="form-input" id="nameInput" type="text" placeholder="">
+        </div>
+        <div class="form-row">
+            <label class="form-label" for="ageInput">Age:</label>
+            <input class="form-input" id="ageInput" type="number" min="18" max="120" placeholder="">
+        </div>
+        <div class="form-row">
+            <label class="form-label" for="typeSelect">Exercise Type:</label>
+            <select class="form-select" id="typeSelect">
+                <option value="" disabled selected></option>
+                <option value="Running">Running</option>
+                <option value="Weight Training">Weight Training</option>
+                <option value="Cycling">Cycling</option>
+                <option value="Yoga">Yoga</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <label class="form-label" for="durationInput">Duration:</label>
+            <input class="form-input" id="durationInput" type="number" min="1" placeholder="minutes">
+        </div>
+
+        <div class="form-section-label">Have you hydrated today?</div>
+        <div class="checkbox-row">
+            <label><input type="checkbox" id="hydratedYes" onchange="uncheckOther(this,'hydratedNo')"> Yes</label>
+            <label><input type="checkbox" id="hydratedNo"  onchange="uncheckOther(this,'hydratedYes')"> No</label>
+        </div>
+
+        <div class="form-section-label">Do you smoke?</div>
+        <div class="checkbox-row">
+            <label><input type="checkbox" id="smokesYes" onchange="uncheckOther(this,'smokesNo')"> Yes</label>
+            <label><input type="checkbox" id="smokesNo"  onchange="uncheckOther(this,'smokesYes')"> No</label>
+        </div>
+
+        <button class="btn-log" onclick="logActivity()">Log Activity</button>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <div class="results-label">Your Points:</div>
+        <div class="result-row">
+            <span class="result-field-label">Points:</span>
+            <div class="result-box" id="pointsOut"></div>
+        </div>
+        <div class="result-row">
+            <span class="result-field-label">Advice:</span>
+            <div class="result-box" id="adviceOut"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const POINTS = {
+        'Running': 10,
+        'Weight Training': 20,
+        'Cycling': 5,
+        'Yoga': 2,
+        'Other': 5
+    };
+
+    function uncheckOther(el, otherId) {
+        if (el.checked) document.getElementById(otherId).checked = false;
+    }
+
+    function showError(msg) {
+        const el = document.getElementById('errorMsg');
+        el.textContent = '⚠ ' + msg;
+        el.classList.add('show');
+    }
+
+    function clearError() {
+        const el = document.getElementById('errorMsg');
+        el.textContent = '';
+        el.classList.remove('show');
+    }
+
+    function logActivity() {
+        clearError();
+
+        const name     = document.getElementById('nameInput').value.trim();
+        const ageRaw   = document.getElementById('ageInput').value.trim();
+        const type     = document.getElementById('typeSelect').value;
+        const durRaw   = document.getElementById('durationInput').value.trim();
+        const hydrated = document.getElementById('hydratedYes').checked;
+        const smokes   = document.getElementById('smokesYes').checked;
+
+        const age = parseInt(ageRaw, 10);
+        if (isNaN(age) || age < 18 || age > 120) {
+            showError('Please enter a valid age between 18 and 120.');
+            return;
+        }
+
+        if (!type) {
+            showError('Please select an exercise type.');
+            return;
+        }
+
+        const duration = parseInt(durRaw, 10);
+        if (isNaN(duration) || duration <= 0) {
+            showError('Please enter a valid duration (minutes).');
+            return;
+        }
+
+        let points = POINTS[type] * duration;
+        if (hydrated) points += 5;
+        if (smokes)   points -= 10;
+
+        let advice = smokes
+            ? 'Quitting smoking will greatly improve your fitness results!'
+            : hydrated
+                ? 'Great job staying hydrated! Keep it up.'
+                : 'Remember to drink water during exercise.';
+
+        document.getElementById('pointsOut').textContent = points;
+        document.getElementById('adviceOut').textContent = advice;
+    }
+</script>
+</body>
+</html>
