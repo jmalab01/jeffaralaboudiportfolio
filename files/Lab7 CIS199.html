@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 7 - CIS 199 | Jeffar Alaboudi</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            padding: 32px;
+            min-height: 100vh;
+        }
+        h1 { color: #569cd6; font-size: 1.4rem; margin-bottom: 4px; }
+        .meta { color: #888; font-size: 0.85rem; margin-bottom: 28px; }
+        .section-title { color: #9cdcfe; font-size: 1.05rem; margin: 28px 0 10px; }
+
+        /* ── Source Code ── */
+        .code-block {
+            background: #252526;
+            border: 1px solid #3c3c3c;
+            border-radius: 8px;
+            padding: 20px 24px;
+            white-space: pre;
+            line-height: 1.75;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .type    { color: #4ec9b0; }
+        .string  { color: #ce9178; }
+        .number  { color: #b5cea8; }
+        .method  { color: #dcdcaa; }
+
+        /* ── Interactive Console ── */
+        .console-wrapper {
+            background: #0c0c0c;
+            border: 1px solid #3c3c3c;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .console-bar {
+            background: #2d2d2d;
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            color: #888;
+            border-bottom: 1px solid #3c3c3c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .console-bar span { color: #4ec9b0; font-weight: bold; }
+        .console-output {
+            padding: 16px 20px;
+            min-height: 140px;
+            font-size: 0.92rem;
+            line-height: 1.8;
+            white-space: pre;
+        }
+        .console-input-row {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 16px;
+            gap: 8px;
+        }
+        .console-prompt { color: #569cd6; font-size: 0.92rem; white-space: nowrap; }
+        .console-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #555;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.92rem;
+            outline: none;
+            padding: 2px 4px;
+            max-width: 120px;
+        }
+        .console-input:focus { border-bottom-color: #569cd6; }
+        .btn-enter {
+            background: #0e639c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 16px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-enter:hover { background: #1177bb; }
+        .btn-reset {
+            background: #3c3c3c;
+            color: #ccc;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 14px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin: 0 20px 16px;
+        }
+        .btn-reset:hover { background: #555; }
+
+        .out-normal  { color: #d4d4d4; }
+        .out-prompt  { color: #569cd6; }
+        .out-stars   { color: #ffd700; }
+        .out-invalid { color: #f48771; }
+        .out-header  { color: #c586c0; font-weight: bold; }
+        .out-input   { color: #ce9178; }
+    </style>
+</head>
+<body>
+
+<h1>Lab 7 — Square of Asterisks</h1>
+<div class="meta">CIS 199 &nbsp;|&nbsp; Jeffar Alaboudi &nbsp;|&nbsp; Grade ID: S2408Lab</div>
+
+<!-- ── Source Code ── -->
+<div class="section-title">// Source Code — Program.cs</div>
+<div class="code-block"><span class="comment">//Grade id S2408Lab</span>
+<span class="comment">// frist enter a positive integer for the number of stars per side of a square</span>
+<span class="comment">// second loop that continues indefinitely until a valid positive integer is entered</span>
+<span class="comment">// third program reads the user input from the console, attempting to parse it as an integer</span>
+<span class="comment">// foruth ShowSquareOfStars method with the entered number of stars per side and exits the loop</span>
+<span class="comment">// fifth numStars, representing the number of stars per side of the square.</span>
+<span class="comment">// sixth displays a square of asterisks (*) with the specified number of rows and columns, forming a square</span>
+<span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Collections.Generic;
+<span class="keyword">using</span> System.Linq;
+<span class="keyword">using</span> System.Text;
+<span class="keyword">using</span> System.Threading.Tasks;
+
+<span class="keyword">namespace</span> <span class="type">Lab7</span>
+{
+    <span class="keyword">internal class</span> <span class="type">Program</span>
+    {
+        <span class="keyword">static void</span> <span class="method">Main</span>(<span class="keyword">string</span>[] args)
+        {
+            <span class="comment">// a valid positive integer has to enter</span>
+            <span class="keyword">while</span> (<span class="keyword">true</span>)
+            {
+                Console.<span class="method">Write</span>(<span class="string">"Enter a positive integer for the number of stars per side: "</span>);
+
+                <span class="comment">// parse user input as an integer</span>
+                <span class="keyword">if</span> (int.<span class="method">TryParse</span>(Console.<span class="method">ReadLine</span>(), <span class="keyword">out int</span> numStars) &amp;&amp; numStars &gt; <span class="number">0</span>)
+                {
+                    <span class="comment">// If input is a positive integer display the square of asterisks and exit loop</span>
+                    <span class="method">ShowSquareOfStars</span>(numStars);
+                    <span class="keyword">break</span>;
+                }
+                <span class="keyword">else</span>
+                {
+                    <span class="comment">// If input is not a positive integer display an error message</span>
+                    Console.<span class="method">WriteLine</span>(<span class="string">"Invalid input. Please enter a positive integer."</span>);
+                }
+            }
+        }
+
+        <span class="keyword">static void</span> <span class="method">ShowSquareOfStars</span>(<span class="keyword">int</span> numStars)
+        {
+            <span class="comment">// Display the size of the square</span>
+            Console.<span class="method">WriteLine</span>(<span class="string">$"\n{numStars}x{numStars} Square of Asterisks\n"</span>);
+
+            <span class="comment">// Loop through each row of the square</span>
+            <span class="keyword">for</span> (<span class="keyword">int</span> row = <span class="number">0</span>; row &lt; numStars; row++)
+            {
+                <span class="comment">// Loop through each column of the square</span>
+                <span class="keyword">for</span> (<span class="keyword">int</span> col = <span class="number">0</span>; col &lt; numStars; col++)
+                {
+                    Console.<span class="method">Write</span>(<span class="string">"* "</span>);
+                }
+                Console.<span class="method">WriteLine</span>();
+            }
+        }
+    }
+}</div>
+
+<!-- ── Interactive Console ── -->
+<div class="section-title">// Interactive Console — Try It Live</div>
+<div class="console-wrapper">
+    <div class="console-bar">
+        <span>▶ Lab7.exe</span> &nbsp;— enter a positive integer to draw a square of asterisks
+    </div>
+    <div class="console-output" id="output"></div>
+    <div class="console-input-row" id="inputRow">
+        <span class="console-prompt">Enter stars per side:&nbsp;</span>
+        <input class="console-input" id="numInput" type="number" min="1" max="30" placeholder="e.g. 5" autofocus>
+        <button class="btn-enter" onclick="submitNum()">Enter ↵</button>
+    </div>
+    <button class="btn-reset" onclick="resetConsole()">↺ Reset</button>
+</div>
+
+<script>
+    const output  = document.getElementById('output');
+    const inputRow = document.getElementById('inputRow');
+    const numInput = document.getElementById('numInput');
+
+    function print(text, cls = 'out-normal') {
+        const span = document.createElement('span');
+        span.className = cls;
+        span.textContent = text + '\n';
+        output.appendChild(span);
+        output.scrollTop = output.scrollHeight;
+    }
+
+    function submitNum() {
+        const raw = numInput.value.trim();
+        const val = parseInt(raw, 10);
+
+        print('Enter a positive integer for the number of stars per side: ' + raw, 'out-input');
+        numInput.value = '';
+
+        if (isNaN(val) || val <= 0) {
+            print('Invalid input. Please enter a positive integer.', 'out-invalid');
+            return;
+        }
+
+        if (val > 30) {
+            print('Please enter a number between 1 and 30 for display purposes.', 'out-invalid');
+            return;
+        }
+
+        // Show header
+        print('', 'out-normal');
+        print(val + 'x' + val + ' Square of Asterisks', 'out-header');
+        print('', 'out-normal');
+
+        // Draw the square
+        for (let row = 0; row < val; row++) {
+            let line = '';
+            for (let col = 0; col < val; col++) {
+                line += '* ';
+            }
+            print(line.trimEnd(), 'out-stars');
+        }
+
+        print('', 'out-normal');
+        inputRow.style.display = 'none';
+    }
+
+    function resetConsole() {
+        output.innerHTML = '';
+        inputRow.style.display = 'flex';
+        numInput.value = '';
+        numInput.focus();
+    }
+
+    numInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') submitNum();
+    });
+</script>
+</body>
+</html>
