@@ -2209,7 +2209,7 @@ body {
 
 /* Overlay */
 .resume-modal-overlay {
-    display: none;
+    display: none !important;
     position: fixed;
     inset: 0;
     background: rgba(10, 15, 35, 0.88);
@@ -2220,7 +2220,7 @@ body {
     padding: 1rem;
 }
 .resume-modal-overlay.active {
-    display: flex;
+    display: flex !important;
 }
 
 /* Box — near-fullscreen to show the whole resume */

@@ -176,6 +176,7 @@ function openResumeModal() {
         iframe.src = 'resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
     }
 
+    modal.style.display = '';   // remove inline override
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -185,6 +186,7 @@ function closeResumeModal() {
     const modal = document.getElementById('resumeModal');
     if (!modal) return;
     modal.classList.remove('active');
+    modal.style.display = 'none'; // re-apply inline hide
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
 }
