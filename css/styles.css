@@ -942,6 +942,48 @@ body {
     margin-bottom: 0.5rem;
 }
 
+/* Clickable skill item (link variant) */
+.skill-item-link {
+    display: block;
+    text-decoration: none;
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    margin-bottom: 0.2rem;
+    border: 1px solid transparent;
+    transition: background 0.2s, border-color 0.2s, transform 0.18s;
+    position: relative;
+}
+.skill-item-link::after {
+    content: '→ View Projects';
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--cat-accent, var(--primary-color));
+    opacity: 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: opacity 0.2s, right 0.2s;
+    pointer-events: none;
+}
+.skill-item-link:hover {
+    background: rgba(101, 100, 219, 0.06);
+    border-color: rgba(101, 100, 219, 0.15);
+    transform: translateX(4px);
+}
+.skill-item-link:hover::after {
+    opacity: 1;
+    right: 0.6rem;
+}
+.skill-item-link:hover .skill-name {
+    color: var(--cat-accent, var(--primary-color));
+}
+.skill-item-link:hover .skill-progress {
+    filter: brightness(1.15);
+}
+
 .skill-name {
     display: block;
     margin-bottom: 0.5rem;
@@ -970,12 +1012,14 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
     border: 2px solid transparent;
+    border-top: 4px solid var(--cat-accent, var(--primary-color));
 }
 
 .skill-category:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(101, 100, 219, 0.15);
     border-color: rgba(101, 100, 219, 0.2);
+    border-top-color: var(--cat-accent, var(--primary-color));
 }
 
 .category-title {
@@ -1070,11 +1114,12 @@ body {
 
 .skill-progress {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary-color), var(--light-blue));
+    background: linear-gradient(90deg, var(--cat-accent, var(--primary-color)), var(--light-blue));
     border-radius: 10px;
     transition: width 1.5s cubic-bezier(0.65, 0, 0.35, 1);
     position: relative;
     box-shadow: 0 2px 10px rgba(101, 100, 219, 0.3);
+    width: 0; /* start at 0; JS sets target width */
 }
 
 /* Skills Stats Section */
