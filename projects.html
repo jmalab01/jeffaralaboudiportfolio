@@ -227,6 +227,98 @@
             .viewer-bar-newtab span { display: none; }
         }
 
+        /* ── Tag Filter Bar ── */
+        .tag-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .tag-filter-bar .filter-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #888;
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+        .tag-filter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1.5px solid rgba(101,100,219,0.25);
+            background: #f0f4ff;
+            color: #4f6ef7;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .tag-filter-btn:hover {
+            background: #e0e8ff;
+            border-color: #4f6ef7;
+            transform: translateY(-1px);
+        }
+        .tag-filter-btn.active {
+            background: #4f6ef7;
+            border-color: #4f6ef7;
+            color: #fff;
+        }
+        .tag-filter-btn.all-btn {
+            background: #fff;
+            border-color: #ccc;
+            color: #555;
+        }
+        .tag-filter-btn.all-btn.active {
+            background: #1a1a2e;
+            border-color: #1a1a2e;
+            color: #fff;
+        }
+
+        /* Clickable tags on project cards */
+        .tag {
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s, transform 0.15s;
+        }
+        .tag:hover {
+            background: #4f6ef7;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .tag.active-tag {
+            background: #4f6ef7;
+            color: #fff;
+        }
+
+        /* Dimmed cards when a filter is active */
+        .project-card.tag-hidden {
+            opacity: 0.18;
+            pointer-events: none;
+            filter: grayscale(0.6);
+            transform: scale(0.97);
+            transition: opacity 0.3s, transform 0.3s, filter 0.3s;
+        }
+        .project-card {
+            transition: opacity 0.3s, transform 0.3s, filter 0.3s, box-shadow 0.3s;
+        }
+
+        /* No-results message */
+        .tag-no-results {
+            display: none;
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #999;
+            font-size: 0.95rem;
+        }
+        .tag-no-results i { font-size: 2rem; display: block; margin-bottom: 0.5rem; color: #ccc; }
+
         /* ── Responsive ── */
         @media (max-width: 600px) {
             .modal-overlay { padding: 0; align-items: flex-end; }
@@ -241,6 +333,8 @@
             .modal-header { padding: 14px 16px 12px; }
             .modal-body   { padding: 14px 16px 28px; }
             .modal-title  { font-size: 0.95rem; }
+            .tag-filter-bar { gap: 6px; }
+            .tag-filter-btn { font-size: 0.72rem; padding: 4px 10px; }
         }
     </style>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNjU2NERCIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg5RDJEQyIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0idGV4dGdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q0ZDNmZiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gUm91bmRlZCBzcXVhcmUgYmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIyIiBmaWxsPSIjMGQxNjM1Ii8+CgogIDwhLS0gR3JhZGllbnQgYm9yZGVyIHJpbmcgLS0+CiAgPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSIyMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dyYWQpIiBzdHJva2Utd2lkdGg9IjMuNSIvPgoKICA8IS0tIFN1YnRsZSBpbm5lciBnbG93IHRvcCAtLT4KICA8ZWxsaXBzZSBjeD0iNTAiIGN5PSIxMCIgcng9IjM4IiByeT0iMTQiIGZpbGw9IiM2NTY0REIiIGZpbGwtb3BhY2l0eT0iMC4xOCIvPgoKICA8IS0tIEpBIGxldHRlcnMgLS0+CiAgPCEtLSBKIC0tPgogIDx0ZXh0CiAgICB4PSIxOCIgeT0iNjgiCiAgICBmb250LWZhbWlseT0iJ1NlZ29lIFVJJywgSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIKICAgIGZvbnQtc2l6ZT0iNTQiCiAgICBmb250LXdlaWdodD0iODAwIgogICAgZmlsbD0idXJsKCN0ZXh0Z3JhZCkiCiAgICBsZXR0ZXItc3BhY2luZz0iLTQiPko8L3RleHQ+CgogIDwhLS0gQSAtLT4KICA8dGV4dAogICAgeD0iNDciIHk9IjY4IgogICAgZm9udC1mYW1pbHk9IidTZWdvZSBVSScsIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXNpemU9IjU0IgogICAgZm9udC13ZWlnaHQ9IjgwMCIKICAgIGZpbGw9InVybCgjZ3JhZCkiCiAgICBsZXR0ZXItc3BhY2luZz0iMCI+QTwvdGV4dD4KCiAgPCEtLSBCb3R0b20gYWNjZW50IGxpbmUgLS0+CiAgPHJlY3QgeD0iMTgiIHk9Ijc0IiB3aWR0aD0iNjQiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0idXJsKCNncmFkKSIgb3BhY2l0eT0iMC43Ii8+Cjwvc3ZnPgo=">
@@ -359,7 +453,11 @@
         <div class="container">
             <h1 class="page-title">My Projects</h1>
             <p class="section-subtitle">Academic coursework and projects from my CIS program at UofL</p>
-            <div class="projects-grid">
+
+            <!-- Tag filter bar — populated by JS -->
+            <div class="tag-filter-bar" id="tagFilterBar" aria-label="Filter projects by tag"></div>
+
+            <div class="projects-grid" id="projectsGrid">
 
                 <!-- CIS 199 -->
                 <div class="project-card">
@@ -577,6 +675,10 @@
                     </div>
                 </div>
 
+            </div><!-- /.projects-grid -->
+            <div class="tag-no-results" id="tagNoResults">
+                <i class="fas fa-filter"></i>
+                No projects match this tag. <a href="#" id="tagNoResultsClear" style="color:#4f6ef7;font-weight:600;">Clear filter</a>
             </div>
         </div>
     </section>
@@ -791,6 +893,87 @@
         closeBtn.addEventListener('click', () => closeModal());
         overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (viewerOvly.classList.contains('active')) { closeViewer(); } else { closeModal(); } } });
+
+        // ── Tag Filtering ─────────────────────────────────────────
+        (function() {
+            const cards = Array.from(document.querySelectorAll('.project-card'));
+            const bar   = document.getElementById('tagFilterBar');
+            const noRes = document.getElementById('tagNoResults');
+
+            // Collect all unique tags across all cards
+            const allTags = new Set();
+            cards.forEach(card => {
+                card.querySelectorAll('.tag').forEach(t => allTags.add(t.textContent.trim()));
+            });
+
+            // Build filter bar
+            const allBtn = document.createElement('button');
+            allBtn.className = 'tag-filter-btn all-btn active';
+            allBtn.innerHTML = '<i class="fas fa-th-large"></i> All';
+            allBtn.dataset.tag = '';
+            bar.appendChild(allBtn);
+
+            allTags.forEach(tag => {
+                const btn = document.createElement('button');
+                btn.className = 'tag-filter-btn';
+                btn.textContent = tag;
+                btn.dataset.tag = tag;
+                bar.appendChild(btn);
+            });
+
+            function applyFilter(tag) {
+                // Update button states
+                bar.querySelectorAll('.tag-filter-btn').forEach(b => {
+                    b.classList.toggle('active', b.dataset.tag === tag);
+                });
+                // Highlight matching inline tags on cards
+                document.querySelectorAll('.project-card .tag').forEach(t => {
+                    t.classList.toggle('active-tag', tag && t.textContent.trim() === tag);
+                });
+                // Show/hide cards
+                let visible = 0;
+                cards.forEach(card => {
+                    const cardTags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim());
+                    const match = !tag || cardTags.includes(tag);
+                    card.classList.toggle('tag-hidden', !match);
+                    if (match) visible++;
+                });
+                noRes.style.display = visible === 0 ? 'block' : 'none';
+                // Update URL without reloading so shareable links work
+                const url = new URL(window.location);
+                if (tag) { url.searchParams.set('tag', tag); }
+                else     { url.searchParams.delete('tag'); }
+                history.replaceState(null, '', url);
+            }
+
+            // Filter bar button clicks
+            bar.addEventListener('click', e => {
+                const btn = e.target.closest('.tag-filter-btn');
+                if (btn) applyFilter(btn.dataset.tag);
+            });
+
+            // Inline tag clicks on project cards
+            document.querySelectorAll('.project-card .tag').forEach(tagEl => {
+                tagEl.addEventListener('click', e => {
+                    e.stopPropagation();
+                    const tag = tagEl.textContent.trim();
+                    // Toggle: clicking the same active tag resets to All
+                    const current = new URLSearchParams(window.location.search).get('tag') || '';
+                    applyFilter(current === tag ? '' : tag);
+                });
+            });
+
+            // Clear filter link in no-results panel
+            document.getElementById('tagNoResultsClear').addEventListener('click', e => {
+                e.preventDefault();
+                applyFilter('');
+            });
+
+            // On page load: respect ?tag= param (e.g. from skills page links)
+            const initTag = new URLSearchParams(window.location.search).get('tag') || '';
+            if (initTag) applyFilter(initTag);
+        })();
+        // ─────────────────────────────────────────────────────────
     </script>
 </body>
 </html>
