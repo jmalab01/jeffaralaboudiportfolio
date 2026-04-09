@@ -322,10 +322,14 @@
         /* Dimmed cards when a filter is active */
         .project-card.tag-hidden {
             opacity: 0.18;
-            pointer-events: none;
+            pointer-events: auto;
+            cursor: pointer;
             filter: grayscale(0.6);
             transform: scale(0.97);
             transition: opacity 0.3s, transform 0.3s, filter 0.3s;
+        }
+        .project-card.tag-hidden:hover {
+            opacity: 0.35;
         }
         .project-card {
             transition: opacity 0.3s, transform 0.3s, filter 0.3s, box-shadow 0.3s;
@@ -1016,6 +1020,14 @@
                     const current = new URLSearchParams(window.location.search).get('tag') || '';
                     applyFilter(current === tag ? '' : tag);
                 });
+            });
+
+            // Click on a dimmed (tag-hidden) card resets filter back to All
+            document.getElementById('projectsGrid').addEventListener('click', e => {
+                const card = e.target.closest('.project-card');
+                if (card && card.classList.contains('tag-hidden')) {
+                    applyFilter('');
+                }
             });
 
             // Clear filter link in no-results panel
