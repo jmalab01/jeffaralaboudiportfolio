@@ -921,7 +921,7 @@
                 bar.appendChild(btn);
             });
 
-            function applyFilter(tag) {
+            function applyFilter(tag, scrollToResult) {
                 // Update button states
                 bar.querySelectorAll('.tag-filter-btn').forEach(b => {
                     b.classList.toggle('active', b.dataset.tag === tag);
@@ -931,12 +931,16 @@
                     t.classList.toggle('active-tag', tag && t.textContent.trim() === tag);
                 });
                 // Show/hide cards
+                let firstMatch = null;
                 let visible = 0;
                 cards.forEach(card => {
                     const cardTags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim());
                     const match = !tag || cardTags.includes(tag);
                     card.classList.toggle('tag-hidden', !match);
-                    if (match) visible++;
+                    if (match) {
+                        if (!firstMatch) firstMatch = card;
+                        visible++;
+                    }
                 });
                 noRes.style.display = visible === 0 ? 'block' : 'none';
                 // Update URL without reloading so shareable links work
@@ -944,6 +948,17 @@
                 if (tag) { url.searchParams.set('tag', tag); }
                 else     { url.searchParams.delete('tag'); }
                 history.replaceState(null, '', url);
+                // Scroll to the first matching card (or the grid top when clearing)
+                if (scrollToResult !== false) {
+                    const target = (tag && firstMatch) ? firstMatch : document.getElementById('projectsGrid');
+                    if (target) {
+                        setTimeout(() => {
+                            const navH = document.querySelector('.navbar') ? document.querySelector('.navbar').offsetHeight : 70;
+                            const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
+                            window.scrollTo({ top, behavior: 'smooth' });
+                        }, 30); // small delay so CSS transition has started
+                    }
+                }
             }
 
             // Filter bar button clicks
@@ -971,7 +986,12 @@
 
             // On page load: respect ?tag= param (e.g. from skills page links)
             const initTag = new URLSearchParams(window.location.search).get('tag') || '';
-            if (initTag) applyFilter(initTag);
+            if (initTag) {
+                // Apply immediately (no scroll — page hasn't rendered yet)
+                applyFilter(initTag, false);
+                // Once layout is ready, scroll to first match
+                window.addEventListener('load', () => applyFilter(initTag));
+            }
         })();
         // ─────────────────────────────────────────────────────────
     </script>
