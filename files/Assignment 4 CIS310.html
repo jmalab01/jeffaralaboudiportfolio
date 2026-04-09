@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment 4 — ERD Crow's Foot — CIS 310</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e8e8e8;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 12px;
+    color: #1a1a1a;
+    padding: 20px 0 40px;
+  }
+
+  .page {
+    background: #fff;
+    width: 960px;
+    margin: 0 auto;
+    padding: 52px 60px 60px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.28);
+    border-radius: 3px;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #101D42;
+    padding-bottom: 14px;
+    margin-bottom: 28px;
+  }
+  .doc-header .left h1 { font-size: 22px; color: #101D42; font-weight: 700; }
+  .doc-header .left .sub { color: #6564DB; font-size: 13px; font-weight: 600; margin-top: 3px; }
+  .doc-header .right { text-align: right; color: #555; font-size: 11px; line-height: 1.7; }
+  .doc-header .right strong { color: #101D42; }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: 13px; font-weight: 700; color: #fff;
+    background: #101D42; padding: 6px 12px; border-radius: 3px;
+    margin: 28px 0 14px; letter-spacing: 0.4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .badge {
+    background: #6564DB; color: #fff; font-size: 10px;
+    padding: 2px 7px; border-radius: 10px; font-weight: 600;
+  }
+
+  /* ── ERD Canvas ── */
+  .erd-canvas {
+    background: #f8f9ff;
+    border: 1px solid #dde0f7;
+    border-radius: 6px;
+    padding: 28px;
+    position: relative;
+    overflow: visible;
+    height: 760px;
+  }
+
+  /* ── Entity boxes ── */
+  .entity {
+    position: absolute;
+    width: 160px;
+    border: 2px solid #4a90d9;
+    border-radius: 4px;
+    overflow: hidden;
+    font-size: 11px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  .entity-header {
+    background: #4a90d9;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 7px 10px;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .entity-body { padding: 0; }
+  .attr-row {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eaeef7;
+    gap: 6px;
+    background: #f0f4fb;
+  }
+  .attr-row:last-child { border-bottom: none; }
+  .attr-row.pk-sep {
+    border-bottom: 2px solid #4a90d9;
+    background: #e8eef8;
+  }
+  .attr-name { flex: 1; color: #1a1a2e; font-size: 10.5px; }
+  .flag {
+    font-size: 9px; font-weight: 700; padding: 1px 4px;
+    border-radius: 3px; white-space: nowrap;
+  }
+  .flag-pk   { background: #ffeaea; color: #c0392b; border: 1px solid #f5c6c6; }
+  .flag-fk   { background: #e8f0fe; color: #2563eb; border: 1px solid #bfcffa; }
+  .flag-pkfk { background: #fff3e0; color: #b45309; border: 1px solid #fcd9a0; }
+
+  /* ── Entity positions ── */
+  .ent-school     { top: 20px;  left: 20px; }
+  .ent-professor  { top: 20px;  left: 270px; }
+  .ent-student    { top: 20px;  left: 630px; }
+  .ent-department { top: 220px; left: 20px; }
+  .ent-semester   { top: 220px; left: 270px; }
+  .ent-course     { top: 440px; left: 20px; }
+  .ent-class      { top: 380px; left: 270px; }
+  .ent-building   { top: 580px; left: 20px; }
+  .ent-room       { top: 580px; left: 270px; }
+  .ent-enrollment { top: 500px; left: 630px; }
+
+  /* ── SVG lines ── */
+  .erd-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .rel-line { stroke: #4a90d9; stroke-width: 1.8; fill: none; }
+  .rel-label {
+    font-size: 9.5px; fill: #4a90d9; font-weight: 600;
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+
+  /* ── Notation key ── */
+  .notation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .notation-card {
+    border: 1px solid #dde0f7;
+    border-radius: 4px;
+    padding: 10px 14px;
+    background: #f7f8ff;
+  }
+  .notation-card h4 { font-size: 11px; color: #101D42; margin-bottom: 6px; font-weight: 700; }
+  .notation-card p  { font-size: 10.5px; color: #444; line-height: 1.6; }
+  .notation-card code { background: #eef0fa; padding: 1px 5px; border-radius: 3px; font-size: 10px; }
+
+  /* ── Relationships table ── */
+  table.rel-table {
+    width: 100%; border-collapse: collapse; font-size: 11px;
+  }
+  table.rel-table thead tr { background: #f0f1fa; }
+  table.rel-table th {
+    padding: 7px 12px; text-align: left; font-weight: 700;
+    color: #444; border-bottom: 1px solid #dde0f7;
+  }
+  table.rel-table td {
+    padding: 6px 12px; border-bottom: 1px solid #ebebeb;
+  }
+  table.rel-table tr:last-child td { border-bottom: none; }
+  table.rel-table tr:hover td { background: #fafbff; }
+  .card-one  { color: #c0392b; font-weight: 700; }
+  .card-many { color: #2563eb; font-weight: 700; }
+
+  /* ── Footer ── */
+  .doc-footer {
+    border-top: 2px solid #101D42; margin-top: 36px; padding-top: 14px;
+    display: flex; justify-content: space-between; color: #888; font-size: 10.5px;
+  }
+
+  /* ── Print button ── */
+  .print-bar {
+    width: 960px; margin: 0 auto 14px;
+    display: flex; justify-content: flex-end;
+  }
+  .btn-print {
+    background: #101D42; color: #fff; border: none;
+    padding: 8px 18px; border-radius: 4px; font-size: 12px;
+    cursor: pointer; display: flex; align-items: center;
+    gap: 6px; font-weight: 600; transition: background 0.2s;
+  }
+  .btn-print:hover { background: #6564DB; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .print-bar { display: none; }
+    .page { box-shadow: none; padding: 30px 40px; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button class="btn-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="doc-header">
+    <div class="left">
+      <h1>Assignment 4 — ERD Crow's Foot Diagram</h1>
+      <div class="sub">CIS 310 — Database Management Systems &nbsp;|&nbsp; Crow's Foot Notation</div>
+    </div>
+    <div class="right">
+      <strong>University of Louisville</strong><br>
+      Jeffar Alaboudi<br>
+      Spring 2025
+    </div>
+  </div>
+
+  <!-- ── ERD DIAGRAM ── -->
+  <div class="section-title">ERD — Crow's Foot Notation <span class="badge">10 Entities</span></div>
+
+  <div class="erd-canvas">
+
+    <svg class="erd-svg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Single bar (one) -->
+        <marker id="one-end" markerWidth="8" markerHeight="10" refX="4" refY="5" orient="auto">
+          <line x1="4" y1="1" x2="4" y2="9" stroke="#4a90d9" stroke-width="1.8"/>
+        </marker>
+        <!-- Double bar (mandatory one) -->
+        <marker id="one-mandatory" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+          <line x1="3" y1="1" x2="3" y2="9" stroke="#4a90d9" stroke-width="1.8"/>
+          <line x1="6" y1="1" x2="6" y2="9" stroke="#4a90d9" stroke-width="1.8"/>
+        </marker>
+        <!-- Crow's foot (many) arriving from left -->
+        <marker id="many-end" markerWidth="12" markerHeight="10" refX="2" refY="5" orient="auto">
+          <line x1="10" y1="1" x2="1" y2="5" stroke="#4a90d9" stroke-width="1.8"/>
+          <line x1="10" y1="9" x2="1" y2="5" stroke="#4a90d9" stroke-width="1.8"/>
+          <line x1="10" y1="1" x2="10" y2="9" stroke="#4a90d9" stroke-width="1.8"/>
+        </marker>
+        <!-- Crow's foot (many) leaving from right -->
+        <marker id="many-start" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+          <line x1="2"  y1="1" x2="11" y2="5" stroke="#4a90d9" stroke-width="1.8"/>
+          <line x1="2"  y1="9" x2="11" y2="5" stroke="#4a90d9" stroke-width="1.8"/>
+          <line x1="2"  y1="1" x2="2"  y2="9" stroke="#4a90d9" stroke-width="1.8"/>
+        </marker>
+        <!-- Crow's foot arriving from top (pointing down) -->
+        <marker id="many-down" markerWidth="10" markerHeight="12" refX="5" refY="2" orient="auto">
+          <line x1="1" y1="10" x2="5" y2="1" stroke="#4a90d9" stroke-width="1.8"/>
+          <line x1="9" y1="10" x2="5" y2="1" stroke="#4a90d9" stroke-width="1.8"/>
+          <line x1="1" y1="10" x2="9" y2="10" stroke="#4a90d9" stroke-width="1.8"/>
+        </marker>
+        <!-- Single horizontal bar (one) arriving top -->
+        <marker id="one-top" markerWidth="10" markerHeight="8" refX="5" refY="6" orient="auto">
+          <line x1="1" y1="4" x2="9" y2="4" stroke="#4a90d9" stroke-width="1.8"/>
+        </marker>
+      </defs>
+
+      <!-- School → Professor: 1 School employs many Professors (Dean / Chair) -->
+      <!-- School right ≈ (180,55), Professor left ≈ (270,60) -->
+      <path class="rel-line"
+        d="M 180 55 L 270 60"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-end)"/>
+      <text class="rel-label" x="196" y="50">Dean / Employ</text>
+
+      <!-- Professor → Department: 1 Professor chairs many Departments -->
+      <!-- Professor bottom ≈ (350,155), Department top ≈ (100,220) -->
+      <path class="rel-line"
+        d="M 350 155 L 350 190 L 100 190 L 100 220"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-down)"/>
+      <text class="rel-label" x="185" y="186">Chair</text>
+
+      <!-- School → Department: 1 School has many Departments (Sch_Code) -->
+      <!-- School bottom ≈ (100,130), Department top ≈ (100,220) -->
+      <path class="rel-line"
+        d="M 80 130 L 80 220"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-down)"/>
+
+      <!-- Department → Course: 1 Department offers many Courses (Dep_Code) -->
+      <!-- Department bottom ≈ (100,340), Course top ≈ (100,440) -->
+      <path class="rel-line"
+        d="M 100 340 L 100 440"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-down)"/>
+
+      <!-- Semester → Class: 1 Semester has many Classes (Sem_Code) -->
+      <!-- Semester bottom ≈ (350,340), Class top ≈ (350,380) -->
+      <path class="rel-line"
+        d="M 350 340 L 350 380"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-down)"/>
+
+      <!-- Course → Class: 1 Course has many Classes (Cou_Code) -->
+      <!-- Course right ≈ (180,470), Class left ≈ (270,470) -->
+      <path class="rel-line"
+        d="M 180 470 L 270 470"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-end)"/>
+
+      <!-- Professor → Class: 1 Professor teaches many Classes (Pro_Nun) -->
+      <!-- Professor bottom ≈ (370,155), Class top via right side -->
+      <path class="rel-line"
+        d="M 400 155 L 400 340 L 390 380"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-end)"/>
+
+      <!-- Building → Room: 1 Building has many Rooms (Bui_Code) -->
+      <!-- Building right ≈ (180,620), Room left ≈ (270,630) -->
+      <path class="rel-line"
+        d="M 180 630 L 270 630"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-end)"/>
+
+      <!-- Room → Class: 1 Room holds many Classes (Room_Code) -->
+      <!-- Room top ≈ (350,580), Class bottom ≈ (350,530) -->
+      <path class="rel-line"
+        d="M 350 580 L 350 530"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#one-top)"/>
+
+      <!-- Professor → Student: Advising (1 Professor advises many Students) -->
+      <!-- Professor right ≈ (430,60), Student left ≈ (630,60) -->
+      <path class="rel-line"
+        d="M 430 60 L 630 60"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-end)"/>
+      <text class="rel-label" x="490" y="54">Advising</text>
+
+      <!-- Student → Enrollment: 1 Student has many Enrollments -->
+      <!-- Student bottom ≈ (710,130), Enrollment top ≈ (710,500) -->
+      <path class="rel-line"
+        d="M 710 130 L 710 500"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-down)"/>
+
+      <!-- Class → Enrollment: 1 Class has many Enrollments (Cla_Code) -->
+      <!-- Class right ≈ (430,455), Enrollment left ≈ (630,560) -->
+      <path class="rel-line"
+        d="M 430 490 L 530 490 L 530 560 L 630 560"
+        marker-start="url(#one-mandatory)"
+        marker-end="url(#many-end)"/>
+    </svg>
+
+    <!-- ── SCHOOL ── -->
+    <div class="entity ent-school">
+      <div class="entity-header">School</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Sch_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Pro_nun</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">Sch_Name</span></div>
+        <div class="attr-row"><span class="attr-name">F_year</span></div>
+      </div>
+    </div>
+
+    <!-- ── PROFESSOR ── -->
+    <div class="entity ent-professor">
+      <div class="entity-header">Professor</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Pro_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Dep_Code</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">Pro_Name</span></div>
+      </div>
+    </div>
+
+    <!-- ── STUDENT ── -->
+    <div class="entity ent-student">
+      <div class="entity-header">Student</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Stu_nun</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">Stu_ID</span></div>
+        <div class="attr-row"><span class="attr-name">Stu_Name</span></div>
+      </div>
+    </div>
+
+    <!-- ── DEPARTMENT ── -->
+    <div class="entity ent-department">
+      <div class="entity-header">Department</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Dep_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Pro_nun</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Sch_Code</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">Pro_Name</span></div>
+      </div>
+    </div>
+
+    <!-- ── SEMESTER ── -->
+    <div class="entity ent-semester">
+      <div class="entity-header">Semester</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Sem_Code</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">F_Sem</span></div>
+        <div class="attr-row"><span class="attr-name">Sem_Schedule</span></div>
+      </div>
+    </div>
+
+    <!-- ── COURSE ── -->
+    <div class="entity ent-course">
+      <div class="entity-header">Course</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Cou_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Dep_Code</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">Cou_Name</span></div>
+      </div>
+    </div>
+
+    <!-- ── CLASS ── -->
+    <div class="entity ent-class">
+      <div class="entity-header">Class</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Cla_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Room_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Cou_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Sem_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Pro_Nun</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BUILDING ── -->
+    <div class="entity ent-building">
+      <div class="entity-header">Building</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Bui_Code</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">Bui_Number</span></div>
+        <div class="attr-row"><span class="attr-name">Bui_Name</span></div>
+      </div>
+    </div>
+
+    <!-- ── ROOM ── -->
+    <div class="entity ent-room">
+      <div class="entity-header">Room</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pk">PK</span>
+          <span class="attr-name">Room_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-fk">FK</span>
+          <span class="attr-name">Bui_Code</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">Room_Number</span></div>
+      </div>
+    </div>
+
+    <!-- ── ENROLLMENT ── -->
+    <div class="entity ent-enrollment">
+      <div class="entity-header">Enrollment</div>
+      <div class="entity-body">
+        <div class="attr-row pk-sep">
+          <span class="flag flag-pkfk">PK FK</span>
+          <span class="attr-name">Cla_Code</span>
+        </div>
+        <div class="attr-row">
+          <span class="flag flag-pkfk">PK FK</span>
+          <span class="attr-name">Sch_nun</span>
+        </div>
+        <div class="attr-row"><span class="attr-name">Stu_ID</span></div>
+        <div class="attr-row"><span class="attr-name">Pro_ID</span></div>
+      </div>
+    </div>
+
+  </div><!-- end erd-canvas -->
+
+  <!-- ── NOTATION KEY ── -->
+  <div class="section-title">Notation Key</div>
+  <div class="notation-grid">
+    <div class="notation-card">
+      <h4>🔴 Primary Key (PK)</h4>
+      <p>Uniquely identifies each record in the entity. Shown above the <strong>PK separator line</strong>.</p>
+    </div>
+    <div class="notation-card">
+      <h4>🔵 Foreign Key (FK)</h4>
+      <p>References the PK of another entity. Creates a relationship link between tables.</p>
+    </div>
+    <div class="notation-card">
+      <h4>🟠 PK + FK</h4>
+      <p>Column serves as both a primary key component <em>and</em> a foreign key — used in junction/subtype entities.</p>
+    </div>
+    <div class="notation-card">
+      <h4>‖ One (Mandatory)</h4>
+      <p>Double bar — each instance <em>must</em> have exactly one matching record on the other side.</p>
+    </div>
+    <div class="notation-card">
+      <h4>≺ Crow's Foot (Many)</h4>
+      <p>Fork symbol — one record on the single side maps to <em>many</em> records on the crow's foot side.</p>
+    </div>
+    <div class="notation-card">
+      <h4>PK Separator</h4>
+      <p>The <strong>bold horizontal line</strong> inside each entity box separates PK attributes from non-key attributes.</p>
+    </div>
+  </div>
+
+  <!-- ── RELATIONSHIPS TABLE ── -->
+  <div class="section-title">Relationships Summary <span class="badge">9 Relationships</span></div>
+  <table class="rel-table">
+    <thead>
+      <tr>
+        <th>Parent Entity</th>
+        <th>Child Entity</th>
+        <th>Cardinality</th>
+        <th>Linking Attribute</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>School</td>
+        <td>Professor</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Pro_nun</code></td>
+        <td>One school employs many professors (Dean)</td>
+      </tr>
+      <tr>
+        <td>School</td>
+        <td>Department</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Sch_Code</code></td>
+        <td>One school has many departments</td>
+      </tr>
+      <tr>
+        <td>Professor</td>
+        <td>Department</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Pro_nun</code></td>
+        <td>One professor chairs many departments</td>
+      </tr>
+      <tr>
+        <td>Professor</td>
+        <td>Student</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Pro_Code</code></td>
+        <td>One professor advises many students</td>
+      </tr>
+      <tr>
+        <td>Department</td>
+        <td>Course</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Dep_Code</code></td>
+        <td>One department offers many courses</td>
+      </tr>
+      <tr>
+        <td>Semester</td>
+        <td>Class</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Sem_Code</code></td>
+        <td>One semester contains many class sections</td>
+      </tr>
+      <tr>
+        <td>Course</td>
+        <td>Class</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Cou_Code</code></td>
+        <td>One course has many class sections</td>
+      </tr>
+      <tr>
+        <td>Building</td>
+        <td>Room</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Bui_Code</code></td>
+        <td>One building has many rooms</td>
+      </tr>
+      <tr>
+        <td>Room</td>
+        <td>Class</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Room_Code</code></td>
+        <td>One room holds many class sections</td>
+      </tr>
+      <tr>
+        <td>Class</td>
+        <td>Enrollment</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Cla_Code</code></td>
+        <td>One class has many enrollment records</td>
+      </tr>
+      <tr>
+        <td>Student</td>
+        <td>Enrollment</td>
+        <td><span class="card-one">1</span> : <span class="card-many">Many</span></td>
+        <td><code>Stu_nun</code></td>
+        <td>One student has many enrollment records</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── FOOTER ── -->
+  <div class="doc-footer">
+    <span>Assignment 4 — ERD Crow's Foot Diagram &mdash; CIS 310 &mdash; University of Louisville</span>
+    <span>Jeffar Alaboudi &mdash; Spring 2025</span>
+  </div>
+
+</div><!-- end .page -->
+</body>
+</html>
