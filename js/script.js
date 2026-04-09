@@ -167,11 +167,58 @@ window.addEventListener('scroll', () => {
 });
 
 // ── Resume Modal ──────────────────────────────────────────
+const RESUME_PDF_URL = 'https://jmalab01.github.io/jeffaralaboudiportfolio/resume.pdf';
+
 function openResumeModal() {
-    const base = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
-    window.open(base + 'resume.pdf', '_blank');
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'resumeViewerOverlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,15,35,0.92);display:flex;align-items:center;justify-content:center;padding:1rem;';
+
+    // Modal box
+    const box = document.createElement('div');
+    box.style.cssText = 'width:100%;max-width:900px;height:92vh;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.6);';
+
+    // Header bar
+    const header = document.createElement('div');
+    header.style.cssText = 'background:linear-gradient(135deg,#101D42 0%,#1a2a5e 100%);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid rgba(101,100,219,0.3);';
+    header.innerHTML = `
+        <span style="color:#fff;font-weight:700;font-size:1rem;display:flex;align-items:center;gap:10px;">
+            <i class="fas fa-file-alt" style="color:#89D2DC"></i> Jeffar Alaboudi — Resume
+        </span>
+        <div style="display:flex;gap:10px;align-items:center;">
+            <a href="${RESUME_PDF_URL}" download="Jeffar_Alaboudi_Resume.pdf"
+               style="background:#6564DB;color:#fff;border:none;padding:8px 18px;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:600;display:flex;align-items:center;gap:7px;text-decoration:none;">
+                <i class="fas fa-download"></i> Download
+            </a>
+            <button onclick="closeResumeModal()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>`;
+
+    // iframe using Google Docs Viewer
+    const frame = document.createElement('iframe');
+    frame.src = 'https://docs.google.com/viewer?url=' + encodeURIComponent(RESUME_PDF_URL) + '&embedded=true';
+    frame.style.cssText = 'flex:1;width:100%;border:none;background:#525659;';
+    frame.title = 'Jeffar Alaboudi Resume';
+
+    box.appendChild(header);
+    box.appendChild(frame);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    // Close on backdrop click
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeResumeModal();
+    });
 }
-function closeResumeModal() {}
+
+function closeResumeModal() {
+    const overlay = document.getElementById('resumeViewerOverlay');
+    if (overlay) overlay.remove();
+    document.body.style.overflow = '';
+}
 
 // Close resume modal on overlay click or Escape key
 document.addEventListener('DOMContentLoaded', function () {
