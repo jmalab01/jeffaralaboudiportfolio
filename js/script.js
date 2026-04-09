@@ -168,33 +168,10 @@ window.addEventListener('scroll', () => {
 
 // ── Resume Modal ──────────────────────────────────────────
 function openResumeModal() {
-    const modal = document.getElementById('resumeModal');
-    if (!modal) return;
-
-    const iframe = modal.querySelector('iframe');
-    if (iframe) {
-        // Build absolute URL to resume.pdf from the repo root
-        const base = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
-        const pdfUrl = base + 'resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
-        if (!iframe.src || !iframe.src.includes('resume.pdf')) {
-            iframe.src = pdfUrl;
-        }
-    }
-
-    modal.style.display = '';
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    const base = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
+    window.open(base + 'resume.pdf', '_blank');
 }
-
-function closeResumeModal() {
-    const modal = document.getElementById('resumeModal');
-    if (!modal) return;
-    modal.classList.remove('active');
-    modal.style.display = 'none';
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-}
+function closeResumeModal() {}
 
 // Close resume modal on overlay click or Escape key
 document.addEventListener('DOMContentLoaded', function () {
