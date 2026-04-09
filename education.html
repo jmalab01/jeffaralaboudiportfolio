@@ -40,6 +40,7 @@
                 <li><a href="skills.html" class="nav-link">Skills</a></li>
                 <li><a href="education.html" class="nav-link">Education</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="#" class="nav-link nav-resume-link" onclick="openResumeModal(); return false;">Resume</a></li>
             </ul>
         </div>
     </nav>
@@ -145,7 +146,7 @@
                 <div class="footer-social">
                     <a href="https://www.linkedin.com/in/jeffar-alaboudi-921188239" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                     <a href="mailto:Jeffaralaboudi24@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                    <a href="resume.pdf" download="Jeffar_Alaboudi_Resume.pdf" aria-label="Resume"><i class="fas fa-file-pdf"></i></a>
+                    <a href="#" aria-label="Resume" onclick="openResumeModal(); return false;"><i class="fas fa-file-pdf"></i></a>
                 </div>
                 <p>&copy; 2026 Jeffar Alaboudi. All rights reserved.</p>
             </div>
@@ -153,5 +154,25 @@
     </footer>
 
     <script src="js/script.js"></script>
+
+    <!-- Resume Modal -->
+    <div id="resumeModal" class="resume-modal-overlay" aria-hidden="true">
+        <div class="resume-modal-box">
+            <div class="resume-modal-header">
+                <h3><i class="fas fa-file-alt"></i><span> Jeffar Alaboudi — Resume</span></h3>
+                <div class="resume-modal-btns">
+                    <a href="resume.pdf" download="Jeffar_Alaboudi_Resume.pdf" class="resume-dl-btn">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                    <button class="resume-close-btn" onclick="closeResumeModal()" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="resume-modal-frame">
+                <iframe src="" title="Jeffar Alaboudi Resume"></iframe>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

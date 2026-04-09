@@ -166,4 +166,43 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// ── Resume Modal ──────────────────────────────────────────
+function openResumeModal() {
+    const modal = document.getElementById('resumeModal');
+    if (!modal) return;
+
+    // Set iframe src fresh each open so the PDF zoom param is respected
+    const iframe = modal.querySelector('iframe');
+    if (iframe && !iframe.dataset.loaded) {
+        // page-width fits the full page width — best "zoomed in" default
+        iframe.src = 'resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH&zoom=page-width';
+        iframe.dataset.loaded = '1';
+    }
+
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeResumeModal() {
+    const modal = document.getElementById('resumeModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+}
+
+// Close resume modal on overlay click or Escape key
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('resumeModal');
+    if (!modal) return;
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeResumeModal();
+    });
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeResumeModal();
+});
+// ─────────────────────────────────────────────────────────
+
 console.log('Portfolio website loaded successfully!');
