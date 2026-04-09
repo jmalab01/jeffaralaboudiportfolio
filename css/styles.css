@@ -2218,14 +2218,9 @@ body {
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    animation: resumeFadeIn 0.25s ease;
 }
 .resume-modal-overlay.active {
     display: flex;
-}
-@keyframes resumeFadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
 }
 
 /* Box — near-fullscreen to show the whole resume */
@@ -2238,7 +2233,6 @@ body {
     display: flex;
     flex-direction: column;
     box-shadow: 0 32px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(101, 100, 219, 0.25);
-    animation: resumeSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     position: relative;
 }
@@ -2255,10 +2249,6 @@ body {
     animation: gradientShift 3s ease infinite;
     z-index: 1;
     border-radius: 18px 18px 0 0;
-}
-@keyframes resumeSlideUp {
-    from { transform: translateY(40px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
 }
 
 /* Header */

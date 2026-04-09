@@ -171,12 +171,9 @@ function openResumeModal() {
     const modal = document.getElementById('resumeModal');
     if (!modal) return;
 
-    // Set iframe src fresh each open so the PDF zoom param is respected
     const iframe = modal.querySelector('iframe');
-    if (iframe && !iframe.dataset.loaded) {
-        // page-width fits the full page width — best "zoomed in" default
-        iframe.src = 'resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH&zoom=page-width';
-        iframe.dataset.loaded = '1';
+    if (iframe && !iframe.src) {
+        iframe.src = 'resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
     }
 
     modal.classList.add('active');
