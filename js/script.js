@@ -166,41 +166,83 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// ── Resume Modal ──────────────────────────────────────────
+// ── Resume Viewer ─────────────────────────────────────────
 const RESUME_PDF_URL = 'https://jmalab01.github.io/jeffaralaboudiportfolio/resume.pdf';
 
+function _isMobile() {
+    return window.innerWidth <= 768 ||
+        /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+}
+
 function openResumeModal() {
-    // Create overlay
+    // On mobile/tablet: open directly in new tab — browsers handle PDF natively
+    if (_isMobile()) {
+        window.open(RESUME_PDF_URL, '_blank', 'noopener');
+        return;
+    }
+
+    // Desktop: show Google Docs Viewer modal
     const overlay = document.createElement('div');
     overlay.id = 'resumeViewerOverlay';
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,15,35,0.92);display:flex;align-items:center;justify-content:center;padding:1rem;';
+    overlay.style.cssText = [
+        'position:fixed',
+        'inset:0',
+        'z-index:99999',
+        'background:rgba(10,15,35,0.92)',
+        'display:flex',
+        'align-items:center',
+        'justify-content:center',
+        'padding:1rem',
+        'box-sizing:border-box'
+    ].join(';');
 
-    // Modal box
     const box = document.createElement('div');
-    box.style.cssText = 'width:100%;max-width:900px;height:92vh;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.6);';
+    box.style.cssText = [
+        'width:100%',
+        'max-width:960px',
+        'height:92vh',
+        'max-height:92vh',
+        'display:flex',
+        'flex-direction:column',
+        'border-radius:16px',
+        'overflow:hidden',
+        'box-shadow:0 32px 80px rgba(0,0,0,0.65)',
+        'border:1px solid rgba(101,100,219,0.25)'
+    ].join(';');
 
-    // Header bar
     const header = document.createElement('div');
-    header.style.cssText = 'background:linear-gradient(135deg,#101D42 0%,#1a2a5e 100%);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid rgba(101,100,219,0.3);';
+    header.style.cssText = [
+        'background:linear-gradient(135deg,#101D42 0%,#1a2a5e 100%)',
+        'padding:14px 20px',
+        'display:flex',
+        'align-items:center',
+        'justify-content:space-between',
+        'flex-shrink:0',
+        'border-bottom:1px solid rgba(101,100,219,0.3)',
+        'gap:12px'
+    ].join(';');
+
     header.innerHTML = `
-        <span style="color:#fff;font-weight:700;font-size:1rem;display:flex;align-items:center;gap:10px;">
-            <i class="fas fa-file-alt" style="color:#89D2DC"></i> Jeffar Alaboudi — Resume
+        <span style="color:#fff;font-weight:700;font-size:clamp(0.85rem,2.5vw,1rem);display:flex;align-items:center;gap:10px;white-space:nowrap;">
+            <i class="fas fa-file-alt" style="color:#89D2DC;flex-shrink:0;"></i>
+            <span>Jeffar Alaboudi &mdash; Resume</span>
         </span>
-        <div style="display:flex;gap:10px;align-items:center;">
+        <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
             <a href="${RESUME_PDF_URL}" download="Jeffar_Alaboudi_Resume.pdf"
-               style="background:#6564DB;color:#fff;border:none;padding:8px 18px;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:600;display:flex;align-items:center;gap:7px;text-decoration:none;">
-                <i class="fas fa-download"></i> Download
+               style="background:linear-gradient(135deg,#6564DB,#232ED1);color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:600;display:flex;align-items:center;gap:7px;text-decoration:none;white-space:nowrap;">
+                <i class="fas fa-download"></i><span>Download</span>
             </a>
-            <button onclick="closeResumeModal()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;">
+            <button onclick="closeResumeModal()" aria-label="Close resume viewer"
+                    style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;width:36px;height:36px;min-width:36px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;">
                 <i class="fas fa-times"></i>
             </button>
         </div>`;
 
-    // iframe using Google Docs Viewer
     const frame = document.createElement('iframe');
     frame.src = 'https://docs.google.com/viewer?url=' + encodeURIComponent(RESUME_PDF_URL) + '&embedded=true';
-    frame.style.cssText = 'flex:1;width:100%;border:none;background:#525659;';
+    frame.style.cssText = 'flex:1;width:100%;border:none;background:#525659;min-height:0;';
     frame.title = 'Jeffar Alaboudi Resume';
+    frame.setAttribute('allowfullscreen', '');
 
     box.appendChild(header);
     box.appendChild(frame);
@@ -220,13 +262,9 @@ function closeResumeModal() {
     document.body.style.overflow = '';
 }
 
-// Close resume modal on overlay click or Escape key
-document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('resumeModal');
-    if (!modal) return;
-    modal.addEventListener('click', function (e) {
-        if (e.target === modal) closeResumeModal();
-    });
+// Escape key closes the modal
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeResumeModal();
 });
 document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeResumeModal();
