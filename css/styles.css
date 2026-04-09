@@ -876,6 +876,12 @@ body {
     transition: all 0.3s ease;
     border: 2px solid transparent;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    /* Support <a> tag usage */
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 }
 
 .interest-item:hover {
@@ -903,6 +909,27 @@ body {
 .interest-item p {
     color: var(--text-color);
     line-height: 1.6;
+    flex: 1;
+}
+
+/* "View Projects →" label that appears on hover */
+.interest-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 1.1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.interest-item:hover .interest-cta {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .skill-items {
@@ -1626,11 +1653,30 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
     transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.course-badge::after {
+    content: '\f061'; /* fa-arrow-right */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.7rem;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.2s, transform 0.2s;
 }
 
 .course-badge:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(101, 100, 219, 0.3);
+    color: var(--white);
+}
+.course-badge:hover::after {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 /* Certifications Section */
