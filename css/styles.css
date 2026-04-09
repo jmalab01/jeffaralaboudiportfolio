@@ -726,26 +726,31 @@ body {
     text-decoration: none;
     transition: color 0.3s ease, transform 0.3s ease;
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .footer-social a::after {
     content: attr(data-tooltip);
     position: absolute;
-    bottom: calc(100% + 8px);
+    bottom: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
-    background: var(--secondary-color);
-    color: var(--light-blue);
+    background: #101D42;
+    color: #89D2DC;
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 4px 9px;
-    border-radius: 5px;
+    padding: 5px 10px;
+    border-radius: 6px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, bottom 0.2s ease;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .footer-social a:hover {
@@ -755,6 +760,7 @@ body {
 
 .footer-social a:hover::after {
     opacity: 1;
+    bottom: calc(100% + 13px);
 }
 
 /* Resume button in footer */
