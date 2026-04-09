@@ -725,11 +725,36 @@ body {
     font-size: 1.25rem;
     text-decoration: none;
     transition: color 0.3s ease, transform 0.3s ease;
+    position: relative;
+}
+
+.footer-social a::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--secondary-color);
+    color: var(--light-blue);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
 }
 
 .footer-social a:hover {
     color: var(--light-blue);
     transform: translateY(-3px);
+}
+
+.footer-social a:hover::after {
+    opacity: 1;
 }
 
 /* Resume button in footer */
@@ -739,30 +764,6 @@ body {
 
 .footer-resume-label {
     display: none;
-}
-
-.footer-resume-btn::after {
-    content: 'Resume';
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--secondary-color);
-    color: var(--light-blue);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    padding: 4px 8px;
-    border-radius: 5px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-}
-
-.footer-resume-btn:hover::after {
-    opacity: 1;
 }
 
 .footer p {
