@@ -732,6 +732,32 @@ body {
     transform: translateY(-3px);
 }
 
+/* Resume button in footer */
+.footer-resume-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+}
+
+.footer-resume-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--light-blue);
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: opacity 0.25s ease, max-width 0.25s ease;
+}
+
+.footer-resume-btn:hover .footer-resume-label {
+    opacity: 1;
+    max-width: 80px;
+}
+
 .footer p {
     font-size: 0.9rem;
     color: rgba(255,255,255,0.6);
