@@ -770,18 +770,6 @@ body {
     position: relative;
 }
 
-.footer-ja-logo {
-    width: 22px;
-    height: 22px;
-    display: block;
-    border-radius: 5px;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.footer-resume-btn:hover .footer-ja-logo {
-    opacity: 0.85;
-}
-
 .footer-resume-label {
     display: none;
 }
