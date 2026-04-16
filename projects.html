@@ -961,21 +961,30 @@
                 bar.appendChild(btn);
             });
 
-            function applyFilter(tag, scrollToResult) {
-                // Update button states
+            function applyFilter(activeTags, scrollToResult) {
+                // activeTags is a Set of selected tag strings (empty = show all)
+                const hasFilter = activeTags.size > 0;
+
+                // Update filter bar button states
                 bar.querySelectorAll('.tag-filter-btn').forEach(b => {
-                    b.classList.toggle('active', b.dataset.tag === tag);
+                    if (b.dataset.tag === '') {
+                        b.classList.toggle('active', !hasFilter);
+                    } else {
+                        b.classList.toggle('active', activeTags.has(b.dataset.tag));
+                    }
                 });
+
                 // Highlight matching inline tags on cards
                 document.querySelectorAll('.project-card .tag').forEach(t => {
-                    t.classList.toggle('active-tag', tag && t.textContent.trim() === tag);
+                    t.classList.toggle('active-tag', hasFilter && activeTags.has(t.textContent.trim()));
                 });
-                // Show/hide cards
+
+                // Show/hide cards — card visible if it has ANY of the active tags
                 let firstMatch = null;
                 let visible = 0;
                 cards.forEach(card => {
                     const cardTags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim());
-                    const match = !tag || cardTags.includes(tag);
+                    const match = !hasFilter || cardTags.some(t => activeTags.has(t));
                     card.classList.toggle('tag-hidden', !match);
                     if (match) {
                         if (!firstMatch) firstMatch = card;
@@ -983,13 +992,15 @@
                     }
                 });
                 noRes.style.display = visible === 0 ? 'block' : 'none';
-                // Update URL without reloading so shareable links work
+
+                // Update URL
                 const url = new URL(window.location);
-                if (tag) { url.searchParams.set('tag', tag); }
-                else     { url.searchParams.delete('tag'); }
+                if (hasFilter) { url.searchParams.set('tag', [...activeTags].join(',')); }
+                else           { url.searchParams.delete('tag'); }
                 history.replaceState(null, '', url);
-                // Scroll to first matching card when a tag is selected; don't scroll when clearing
-                if (scrollToResult !== false && tag && firstMatch) {
+
+                // Scroll to first match only when adding a filter
+                if (scrollToResult !== false && hasFilter && firstMatch) {
                     setTimeout(() => {
                         const navH = document.querySelector('.navbar') ? document.querySelector('.navbar').offsetHeight : 70;
                         const top = firstMatch.getBoundingClientRect().top + window.scrollY - navH - 16;
@@ -998,33 +1009,48 @@
                 }
             }
 
-            // Filter bar button clicks
+            // Shared mutable set of active tags
+            const activeTags = new Set();
+
+            // Filter bar button clicks — toggle tag, "All" clears everything
             bar.addEventListener('click', e => {
                 const btn = e.target.closest('.tag-filter-btn');
-                if (btn) applyFilter(btn.dataset.tag);
+                if (!btn) return;
+                if (btn.dataset.tag === '') {
+                    activeTags.clear();
+                } else {
+                    if (activeTags.has(btn.dataset.tag)) {
+                        activeTags.delete(btn.dataset.tag); // toggle off
+                    } else {
+                        activeTags.add(btn.dataset.tag);    // toggle on
+                    }
+                }
+                applyFilter(activeTags);
             });
 
-            // Inline tag clicks on project cards
+            // Inline tag clicks on project cards — toggle that tag
             document.querySelectorAll('.project-card .tag').forEach(tagEl => {
                 tagEl.addEventListener('click', e => {
                     e.stopPropagation();
                     const tag = tagEl.textContent.trim();
-                    // Toggle: clicking the same active tag resets to All
-                    const current = new URLSearchParams(window.location.search).get('tag') || '';
-                    applyFilter(current === tag ? '' : tag);
+                    if (activeTags.has(tag)) {
+                        activeTags.delete(tag);
+                    } else {
+                        activeTags.add(tag);
+                    }
+                    applyFilter(activeTags);
                 });
             });
 
-            // Click anywhere on the page (outside filter bar, tags, or visible cards) resets filter
+            // Click anywhere outside filter bar / visible cards / modals resets all filters
             document.addEventListener('click', e => {
-                const currentTag = new URLSearchParams(window.location.search).get('tag') || '';
-                if (!currentTag) return; // no filter active, nothing to reset
-                // Ignore clicks on: filter bar buttons, inline tags, visible (non-hidden) project cards, modals/overlays
+                if (activeTags.size === 0) return;
                 if (e.target.closest('.tag-filter-btn')) return;
                 if (e.target.closest('.project-card .tag')) return;
                 if (e.target.closest('.project-card:not(.tag-hidden)')) return;
                 if (e.target.closest('.modal-overlay') || e.target.closest('.viewer-overlay')) return;
-                applyFilter('');
+                activeTags.clear();
+                applyFilter(activeTags);
             });
 
             // Clear filter link in no-results panel
@@ -1036,10 +1062,9 @@
             // On page load: respect ?tag= param (e.g. from skills page links)
             const initTag = new URLSearchParams(window.location.search).get('tag') || '';
             if (initTag) {
-                // Apply immediately (no scroll — page hasn't rendered yet)
-                applyFilter(initTag, false);
-                // Once layout is ready, scroll to first match
-                window.addEventListener('load', () => applyFilter(initTag));
+                initTag.split(',').forEach(t => activeTags.add(t.trim()));
+                applyFilter(activeTags, false);
+                window.addEventListener('load', () => applyFilter(activeTags));
             }
         })();
         // ─────────────────────────────────────────────────────────
