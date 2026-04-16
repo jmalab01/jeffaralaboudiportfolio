@@ -988,16 +988,13 @@
                 if (tag) { url.searchParams.set('tag', tag); }
                 else     { url.searchParams.delete('tag'); }
                 history.replaceState(null, '', url);
-                // Scroll to the first matching card (or the grid top when clearing)
-                if (scrollToResult !== false) {
-                    const target = (tag && firstMatch) ? firstMatch : document.getElementById('projectsGrid');
-                    if (target) {
-                        setTimeout(() => {
-                            const navH = document.querySelector('.navbar') ? document.querySelector('.navbar').offsetHeight : 70;
-                            const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
-                            window.scrollTo({ top, behavior: 'smooth' });
-                        }, 30); // small delay so CSS transition has started
-                    }
+                // Scroll to first matching card when a tag is selected; don't scroll when clearing
+                if (scrollToResult !== false && tag && firstMatch) {
+                    setTimeout(() => {
+                        const navH = document.querySelector('.navbar') ? document.querySelector('.navbar').offsetHeight : 70;
+                        const top = firstMatch.getBoundingClientRect().top + window.scrollY - navH - 16;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                    }, 30);
                 }
             }
 
@@ -1016,6 +1013,18 @@
                     const current = new URLSearchParams(window.location.search).get('tag') || '';
                     applyFilter(current === tag ? '' : tag);
                 });
+            });
+
+            // Click anywhere on the page (outside filter bar, tags, or visible cards) resets filter
+            document.addEventListener('click', e => {
+                const currentTag = new URLSearchParams(window.location.search).get('tag') || '';
+                if (!currentTag) return; // no filter active, nothing to reset
+                // Ignore clicks on: filter bar buttons, inline tags, visible (non-hidden) project cards, modals/overlays
+                if (e.target.closest('.tag-filter-btn')) return;
+                if (e.target.closest('.project-card .tag')) return;
+                if (e.target.closest('.project-card:not(.tag-hidden)')) return;
+                if (e.target.closest('.modal-overlay') || e.target.closest('.viewer-overlay')) return;
+                applyFilter('');
             });
 
             // Clear filter link in no-results panel
