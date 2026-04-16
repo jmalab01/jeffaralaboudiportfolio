@@ -988,16 +988,13 @@
                 if (tag) { url.searchParams.set('tag', tag); }
                 else     { url.searchParams.delete('tag'); }
                 history.replaceState(null, '', url);
-                // Scroll to the first matching card (or the grid top when clearing)
-                if (scrollToResult !== false) {
-                    const target = (tag && firstMatch) ? firstMatch : document.getElementById('projectsGrid');
-                    if (target) {
-                        setTimeout(() => {
-                            const navH = document.querySelector('.navbar') ? document.querySelector('.navbar').offsetHeight : 70;
-                            const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
-                            window.scrollTo({ top, behavior: 'smooth' });
-                        }, 30); // small delay so CSS transition has started
-                    }
+                // Scroll to first matching card when a tag is selected; don't scroll when clearing
+                if (scrollToResult !== false && tag && firstMatch) {
+                    setTimeout(() => {
+                        const navH = document.querySelector('.navbar') ? document.querySelector('.navbar').offsetHeight : 70;
+                        const top = firstMatch.getBoundingClientRect().top + window.scrollY - navH - 16;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                    }, 30); // small delay so CSS transition has started
                 }
             }
 
