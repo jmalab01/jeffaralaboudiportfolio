@@ -167,10 +167,10 @@ window.addEventListener('scroll', () => {
 });
 
 // ── Resume Viewer ─────────────────────────────────────────
-const RESUME_PDF_URL = 'https://jmalab01.github.io/jeffaralaboudiportfolio/resume.pdf';
+const RESUME_PDF_URL = 'https://jmalab01.github.io/jeffaralaboudiportfolio/files/resume.html';
 
 function openResumeModal() {
-    // On mobile just open the PDF directly — most reliable experience
+    // On mobile open directly in new tab — most reliable experience
     if (window.innerWidth <= 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         window.open(RESUME_PDF_URL, '_blank', 'noopener,noreferrer');
         return;
@@ -189,7 +189,7 @@ function openResumeModal() {
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#101D42;flex-shrink:0;">
                 <span style="color:#fff;font-weight:600;font-size:0.95rem;letter-spacing:0.02em;">📄 Resume — Jeffar Alaboudi</span>
                 <div style="display:flex;gap:10px;align-items:center;">
-                    <a href="${RESUME_PDF_URL}" download="Jeffar_Alaboudi_Resume.pdf"
+                    <a href="${RESUME_PDF_URL}" download="Jeffar_Alaboudi_Resume.html"
                        style="color:#89D2DC;font-size:0.82rem;text-decoration:none;padding:5px 12px;border:1px solid #89D2DC;border-radius:6px;"
                        onmouseover="this.style.background='rgba(137,210,220,0.15)'" onmouseout="this.style.background='transparent'">
                         ⬇ Download
@@ -213,7 +213,7 @@ function openResumeModal() {
                 <span style="font-size:3rem;">📄</span>
                 <p style="color:#333;font-size:1rem;margin:0;font-weight:600;">Couldn\u0027t load the preview</p>
                 <p style="color:#888;font-size:0.85rem;margin:0;">Try downloading it directly instead.</p>
-                <a href="${RESUME_PDF_URL}" download="Jeffar_Alaboudi_Resume.pdf"
+                <a href="${RESUME_PDF_URL}" download="Jeffar_Alaboudi_Resume.html"
                    style="background:#6564DB;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.9rem;">
                     ⬇ Download Resume
                 </a>
@@ -242,14 +242,14 @@ function resumeLoadIframe(attempt) {
     iframe.style.display   = 'none';
     fallback.style.display = 'none';
 
-    // Bust cache on retries so Google Docs Viewer fetches fresh
-    const cacheBust = attempt > 1 ? '&t=' + Date.now() : '';
-    const gdocsUrl  = 'https://docs.google.com/viewer?url=' + encodeURIComponent(RESUME_PDF_URL) + '&embedded=true' + cacheBust;
+    // Load HTML resume directly — no Google Docs Viewer needed
+    const cacheBust = attempt > 1 ? '?t=' + Date.now() : '';
+    const url = RESUME_PDF_URL + cacheBust;
 
-    // Timeout — if iframe hasn't loaded in 10 s, show fallback
+    // Timeout — if iframe hasn't loaded in 10 s, retry or show fallback
     const timer = setTimeout(() => {
         if (attempt < 3) {
-            resumeLoadIframe(attempt + 1); // auto-retry up to 3 times
+            resumeLoadIframe(attempt + 1);
         } else {
             spinner.style.display  = 'none';
             fallback.style.display = 'flex';
@@ -262,7 +262,7 @@ function resumeLoadIframe(attempt) {
         iframe.style.display  = 'flex';
     };
 
-    iframe.src = gdocsUrl;
+    iframe.src = url;
 }
 
 function resumeRetry() {
