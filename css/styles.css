@@ -1637,6 +1637,21 @@ body {
     font-size: 1.4rem;
 }
 
+.in-progress-badge {
+    display: inline-block;
+    margin-left: 0.6rem;
+    padding: 0.2rem 0.7rem;
+    background: linear-gradient(135deg, rgba(101, 100, 219, 0.15), rgba(137, 210, 220, 0.15));
+    border: 1px solid var(--primary-color);
+    border-radius: 20px;
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    vertical-align: middle;
+    text-transform: uppercase;
+}
+
 .timeline-institution {
     color: var(--primary-color);
     font-weight: 600;
