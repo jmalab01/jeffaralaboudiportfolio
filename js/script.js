@@ -283,4 +283,121 @@ function closeResumeModal() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeResumeModal(); });
 // ─────────────────────────────────────────────────────────
 
+// SR Dean Certificate Modal Functions
+const CERT_PDF_URL = 'https://jmalab01.github.io/jeffaralaboudiportfolio/files/SR_DEAN_CERT.pdf';
+
+function openCertModal() {
+    // On mobile open directly in new tab — most reliable experience
+    if (window.innerWidth <= 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        window.open(CERT_PDF_URL, '_blank', 'noopener,noreferrer');
+        return;
+    }
+
+    // Remove stale overlay if present
+    const existing = document.getElementById('certViewerOverlay');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'certViewerOverlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.78);backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px';
+
+    overlay.innerHTML = `
+        <div id="certModalBox" style="width:100%;max-width:860px;height:90vh;background:#fff;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,0.5);">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:linear-gradient(135deg, #6564DB, #89D2DC);flex-shrink:0;">
+                <span style="color:#fff;font-weight:600;font-size:0.95rem;letter-spacing:0.02em;"><i class="fas fa-award"></i> Senior Dean's Certificate</span>
+                <div style="display:flex;gap:10px;align-items:center;">
+                    <a href="${CERT_PDF_URL}" download="SR_DEAN_CERT.pdf"
+                       style="color:#fff;font-size:0.82rem;text-decoration:none;padding:5px 12px;border:1px solid #fff;border-radius:6px;"
+                       onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='transparent'">
+                        ⬇ Download
+                    </a>
+                    <button onclick="closeCertModal()"
+                        style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;padding:2px 6px;border-radius:6px;"
+                        onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"
+                        aria-label="Close certificate">✕</button>
+                </div>
+            </div>
+            <!-- Loading spinner shown while iframe loads -->
+            <div id="certSpinner" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#f8f9ff;">
+                <div style="width:44px;height:44px;border:4px solid #e0e0f0;border-top-color:#6564DB;border-radius:50%;animation:resumeSpin 0.8s linear infinite;"></div>
+                <p style="color:#666;font-size:0.9rem;margin:0;">Loading certificate…</p>
+            </div>
+            <iframe id="certIframe"
+                style="flex:1;border:none;width:100%;display:none;"
+                title="Certificate"></iframe>
+            <!-- Fallback shown if loading fails -->
+            <div id="certFallback" style="flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#f8f9ff;padding:32px;text-align:center;">
+                <span style="font-size:3rem;">🏆</span>
+                <p style="color:#333;font-size:1rem;margin:0;font-weight:600;">Couldn\u0027t load the preview</p>
+                <p style="color:#888;font-size:0.85rem;margin:0;">Try downloading it directly instead.</p>
+                <a href="${CERT_PDF_URL}" download="SR_DEAN_CERT.pdf"
+                   style="background:linear-gradient(135deg, #6564DB, #89D2DC);color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.9rem;">
+                    ⬇ Download Certificate
+                </a>
+                <button onclick="certRetry()" style="background:none;border:1px solid #6564DB;color:#6564DB;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:0.85rem;">
+                    ↻ Try Again
+                </button>
+            </div>
+        </div>
+        <style>@keyframes resumeSpin { to { transform: rotate(360deg); } }</style>`;
+
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeCertModal(); });
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    certLoadIframe(1);
+}
+
+function certLoadIframe(attempt) {
+    const iframe  = document.getElementById('certIframe');
+    const spinner = document.getElementById('certSpinner');
+    const fallback = document.getElementById('certFallback');
+    if (!iframe) return;
+
+    // Reset to spinner state
+    spinner.style.display  = 'flex';
+    iframe.style.display   = 'none';
+    fallback.style.display = 'none';
+
+    // Bust cache on retries so Google Docs Viewer fetches fresh
+    const cacheBust = attempt > 1 ? '&t=' + Date.now() : '';
+    const gdocsUrl  = 'https://docs.google.com/viewer?url=' + encodeURIComponent(CERT_PDF_URL) + '&embedded=true' + cacheBust;
+
+    // Timeout — if iframe hasn't loaded in 10 s, retry or show fallback
+    const timer = setTimeout(() => {
+        if (attempt < 3) {
+            certLoadIframe(attempt + 1);
+        } else {
+            spinner.style.display  = 'none';
+            fallback.style.display = 'flex';
+        }
+    }, 10000);
+
+    iframe.onload = () => {
+        clearTimeout(timer);
+        spinner.style.display = 'none';
+        iframe.style.display  = 'flex';
+    };
+
+    iframe.src = gdocsUrl;
+}
+
+function certRetry() {
+    certLoadIframe(1);
+}
+
+function closeCertModal() {
+    const overlay = document.getElementById('certViewerOverlay');
+    if (overlay) {
+        // Clear iframe src to stop any ongoing network request
+        const iframe = document.getElementById('certIframe');
+        if (iframe) iframe.src = '';
+        overlay.remove();
+    }
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCertModal(); });
+// ─────────────────────────────────────────────────────────
+
 console.log('Portfolio website loaded successfully!');

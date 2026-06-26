@@ -1882,15 +1882,41 @@ body {
     text-decoration: none;
     position: relative;
     z-index: 1;
+    overflow: hidden;
+}
+
+.cert-view-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.cert-view-btn:hover::before {
+    left: 100%;
 }
 
 .cert-view-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(101, 100, 219, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(101, 100, 219, 0.4);
+    letter-spacing: 0.5px;
+}
+
+.cert-view-btn:active {
+    transform: translateY(-1px);
 }
 
 .cert-view-btn i {
     font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.cert-view-btn:hover i {
+    transform: scale(1.15);
 }
 
 .timeline-description {
