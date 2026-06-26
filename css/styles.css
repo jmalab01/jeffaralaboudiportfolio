@@ -1684,8 +1684,6 @@ body {
     overflow: hidden;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
     position: relative;
-    display: flex;
-    align-items: center;
 }
 
 .progress-fill {
@@ -1695,23 +1693,20 @@ body {
     background: linear-gradient(90deg, #6564DB, #89D2DC, #6564DB);
     background-size: 200% 100%;
     animation: shimmer 2s linear infinite;
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .progress-text {
-    position: absolute;
-    width: 100%;
-    text-align: center;
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #fff;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.35);
     white-space: nowrap;
-    z-index: 1;
     animation: pulse-text 2s ease-in-out infinite;
 }
 
@@ -1788,6 +1783,114 @@ body {
     color: var(--white);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(101, 100, 219, 0.3);
+}
+
+/* SR Dean Certificate Styles */
+.sr-dean-cert-container {
+    margin-top: 1.5rem;
+}
+
+.cert-preview-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(101, 100, 219, 0.08), rgba(137, 210, 220, 0.08));
+    border: 2px solid transparent;
+    border-image: linear-gradient(135deg, var(--primary-color), var(--accent-color)) 1;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cert-preview-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(101, 100, 219, 0.1), transparent);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.cert-preview-card:hover {
+    background: linear-gradient(135deg, rgba(101, 100, 219, 0.15), rgba(137, 210, 220, 0.15));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(101, 100, 219, 0.2);
+}
+
+.cert-preview-card:hover::before {
+    top: -30%;
+    right: -30%;
+}
+
+.cert-preview-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 50%;
+    font-size: 1.8rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.cert-preview-card:hover .cert-preview-icon {
+    transform: scale(1.1) rotate(10deg);
+}
+
+.cert-preview-card h4 {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+}
+
+.cert-preview-text {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.cert-view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: var(--white);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+}
+
+.cert-view-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(101, 100, 219, 0.4);
+}
+
+.cert-view-btn i {
+    font-size: 1rem;
 }
 
 .timeline-description {
