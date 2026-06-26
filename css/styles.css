@@ -1787,22 +1787,24 @@ body {
 
 /* SR Dean Certificate Styles */
 .sr-dean-cert-container {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 .cert-preview-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(101, 100, 219, 0.08), rgba(137, 210, 220, 0.08));
+    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, rgba(101, 100, 219, 0.12), rgba(137, 210, 220, 0.12));
     border: 2px solid transparent;
     border-image: linear-gradient(135deg, var(--primary-color), var(--accent-color)) 1;
-    border-radius: 12px;
+    border-radius: 16px;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 8px 30px rgba(101, 100, 219, 0.15);
 }
 
 .cert-preview-card::before {
@@ -1812,16 +1814,16 @@ body {
     right: -50%;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, rgba(101, 100, 219, 0.1), transparent);
+    background: radial-gradient(circle, rgba(101, 100, 219, 0.2), transparent);
     border-radius: 50%;
     pointer-events: none;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .cert-preview-card:hover {
-    background: linear-gradient(135deg, rgba(101, 100, 219, 0.15), rgba(137, 210, 220, 0.15));
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(101, 100, 219, 0.2);
+    background: linear-gradient(135deg, rgba(101, 100, 219, 0.18), rgba(137, 210, 220, 0.18));
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(101, 100, 219, 0.25);
 }
 
 .cert-preview-card:hover::before {
@@ -1830,59 +1832,67 @@ body {
 }
 
 .cert-preview-icon {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
     border-radius: 50%;
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     color: var(--white);
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     z-index: 1;
+    box-shadow: 0 6px 20px rgba(101, 100, 219, 0.4);
 }
 
 .cert-preview-card:hover .cert-preview-icon {
-    transform: scale(1.1) rotate(10deg);
+    transform: scale(1.2) rotate(15deg);
+    box-shadow: 0 10px 30px rgba(101, 100, 219, 0.6);
 }
 
 .cert-preview-card h4 {
     color: var(--primary-color);
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     margin-bottom: 0.5rem;
     font-weight: 700;
     position: relative;
     z-index: 1;
+    letter-spacing: 0.3px;
 }
 
 .cert-preview-text {
     color: var(--secondary-color);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
     position: relative;
     z-index: 1;
+    font-weight: 500;
 }
 
 .cert-view-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.5rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #6564DB 0%, #232ED1 50%, #89D2DC 100%);
     color: var(--white);
     border: none;
-    border-radius: 25px;
+    border-radius: 50px;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     text-decoration: none;
     position: relative;
     z-index: 1;
     overflow: hidden;
+    box-shadow: 0 4px 20px rgba(101, 100, 219, 0.3);
+    text-transform: uppercase;
 }
 
 .cert-view-btn::before {
@@ -1892,31 +1902,46 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s ease;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+.cert-view-btn::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, #6564DB 0%, #232ED1 50%, #89D2DC 100%);
+    border-radius: 50px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .cert-view-btn:hover::before {
     left: 100%;
 }
 
+.cert-view-btn:hover::after {
+    opacity: 0.5;
+}
+
 .cert-view-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(101, 100, 219, 0.4);
-    letter-spacing: 0.5px;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(101, 100, 219, 0.5), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .cert-view-btn:active {
-    transform: translateY(-1px);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(101, 100, 219, 0.4);
 }
 
 .cert-view-btn i {
-    font-size: 1rem;
-    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .cert-view-btn:hover i {
-    transform: scale(1.15);
+    transform: scale(1.25) rotate(10deg);
 }
 
 .timeline-description {
